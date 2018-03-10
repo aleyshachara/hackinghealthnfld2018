@@ -1,0 +1,176 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="my-view4">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+
+        padding: 10px;
+      }
+      .section {
+        width: 100%;
+        display: flex;
+      }
+      .left-col {
+        margin: 0 10% 0 0;
+
+      }
+      .row {
+        width: 100%;
+      }
+
+      .flex-row {
+        display: flex;
+      }
+
+      .label {
+        min-width: 190px;
+      }
+      .b-label {
+        min-width: 130px;
+      }
+
+      .mini {
+        display: none;
+      }
+
+      @media screen and (max-width: 900px), and (min-width: 550px){
+        .section {
+          display: block;
+          overflow-wrap: break-word;
+            word-wrap: break-word;
+            word-break: break-word;
+        }
+        .b-label {
+          margin: 0;
+          min-width: 190px;
+        }
+        .b-row {
+          margin-top: 16px;
+        }  
+        .mini {
+          display: block;
+          width: 80%;
+          height: 1px;
+          border: 0;
+        }
+
+        }
+
+        @media screen and (max-width: 550px) {
+          .section {
+            display: block;
+          }
+          .label {
+            width: 100%;
+            margin-top: 16px;
+          }
+          .b-label {
+            width: 100%;
+            margin-top: 16px;
+          }
+          .flex-row {
+            display: block;
+          }
+          .mini {
+          display: block;
+          width: 80%;
+          height: 1px;
+          border: 0;
+        }
+        }
+    </style>
+
+    <div class="card">
+      <h2>Patient Demographics - [[patient.lastName]], [[patient.firstName]]</h2>
+      <div class="section">
+        <div class="col left-col">
+          <div class="row flex-row b-row">
+            <div class="bold-body-copy b-label">
+              Patient Identifier
+            </div>
+            <div class="body-copy">
+                MCP [[patient.patientIdentifiers.0.clientIdentifier]]
+            </div>
+          </div>
+          <hr class="mini">
+          <div class="row flex-row b-row">
+            <div class="bold-body-copy b-label">
+              Alternate Names
+            </div>
+            <div class="body-copy">
+               [[patient.lastName]], [[patient.firstName]] (Legal)
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <hr class="mini">
+          <div class="row flex-row">
+            <div class="bold-body-copy label">
+              Sex
+            </div>
+            <div class="body-copy">
+              [[patient.gender]]
+            </div>
+          </div>
+          <div class="row flex-row">
+            <div class="bold-body-copy label">
+              Date of Birth
+            </div>
+            <div class="body-copy">
+              [[patient.dateOfBirth]]
+            </div>
+          </div>
+          <div class="row flex-row">
+            <div class="bold-body-copy label">
+              Address
+            </div>
+            <div class="body-copy">
+                [[patient.addressLine1]],
+                <template is="dom-if" if="[[address.addressLine2]]">
+                  [[patient.addressLine2]],
+                </template> 
+                [[patient.municipality]], [[patient.provinceState]],
+                [[patient.country]], [[patient.postalZipCode]]
+            </div>
+          </div>
+          <div class="row flex-row">
+            <div class="bold-body-copy label">
+              Phone
+            </div>
+            <div class="body-copy">
+                [[patient.phoneNumber]] (Cell)<br>
+            </div>
+          </div>
+          <div class="row flex-row">
+            <div class="bold-body-copy label">
+              Email
+            </div>
+            <div class="body-copy">
+              anthony@gmail.com
+            </div>
+          </div>
+        </div> 
+      </div>
+    </div>
+  </template>
+
+  <script>
+    class MyView4 extends Polymer.Element {
+      static get is() { return 'my-view4'; }
+
+      static get properties() {
+        return {
+          patient: {
+            type: Object,
+            value: {"firstName":"MARIANO_TPCHI","middleName":"","lastName":"ANTHONY","dateOfBirth":"26-May-1963","gender":"M","source":"","addressLine1":"235 BYRD AVE","addressLine2":"","municipality":"OPEN HALL","provinceState":"NL","postalZipCode":"A0C 2B0","country":"CA","addressType":"","phoneNumber":"709 876 5696","dateOfExpiry":"","patientIdentifiers":[{"clientIdentifier":"1002726876","clientIdentifierType":"eCID"},{"clientIdentifier":"119631473715","clientIdentifierType":"MCP", "phoneNumber": "1-506-234-5678", "emailAddress": "anthony@email.com"}]}
+          }
+        }
+      }
+    }
+
+    window.customElements.define(MyView4.is, MyView4);
+  </script>
+</dom-module>
