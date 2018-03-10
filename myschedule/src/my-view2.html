@@ -9,6 +9,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
 <link rel="import" href="shared-styles.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
@@ -25,6 +26,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         padding: 10px;
       }
+      .row {
+      	display: flex;
+      }
     </style>
       <h2>Special Criteria:</h2>
       <paper-input always-float-label label="Travel Time" value="{{travelTime}}"></paper-input>
@@ -35,7 +39,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <paper-radio-button name="no">no</paper-radio-button>
       </paper-radio-group> 
   </template>
-
   <script>
     class MyView2 extends Polymer.Element {
       static get is() { return 'my-view2'; }
