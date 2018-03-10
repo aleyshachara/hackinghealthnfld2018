@@ -167,7 +167,7 @@
       <paper-checkbox checked disabled>Low grade fever</paper-checkbox>
 
       <div align="right">
-        <button class="standard-button" style="margin-top: 16px; margin-left: 20px" on-click="scheduleAppointment">Schedule Patient</button>
+        <button class="standard-button" style="margin-top: 16px; margin-left: 20px" on-click="goToSchedule">Schedule Patient</button>
       </div>
     </div>
   </template>
@@ -175,6 +175,11 @@
   <script>
     class MyView4 extends Polymer.Element {
       static get is() { return 'my-view4'; }
+
+      goToSchedule() {
+        var newUrl = "view6";
+        window.location.href = newUrl;
+      }
 
       static get properties() {
         return {

@@ -49,7 +49,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
 
     <div class="card">
-      <h1>Scheduler</h1>
+      <h1>Scheduler - [[patient.lastName]], [[patient.firstName]]</h1>
       <div class="form">
         <my-view2 otherAppointments="{{otherAppointments}}" travelTime="{{travelTime}}" prepTime="{{prepTime}}"></my-view2>
         <my-view5 rheumScore="{{rheumScore}}" id="view5"></my-view5>
@@ -161,7 +161,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             },
             scheduledTime: {
               type: String
-            }
+            },
+            patient: {
+            type: Object,
+            value: {"firstName":"MARIANO_TPCHI","middleName":"","lastName":"ANTHONY","dateOfBirth":"26-May-1963","gender":"M","source":"","addressLine1":"235 BYRD AVE","addressLine2":"","municipality":"OPEN HALL","provinceState":"NL","postalZipCode":"A0C 2B0","country":"CA","addressType":"","phoneNumber":"709 876 5696","dateOfExpiry":"","patientIdentifiers":[{"clientIdentifier":"1002726876","clientIdentifierType":"eCID"},{"clientIdentifier":"119631473715","clientIdentifierType":"MCP", "phoneNumber": "1-506-234-5678", "emailAddress": "anthony@email.com"}]}
+          }
         }
       }
     }
