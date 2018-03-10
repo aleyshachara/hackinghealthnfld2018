@@ -9,29 +9,145 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/neon-animation/web-animations.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="my-view1">
   <template>
+    <link rel="stylesheet" href="../node_modules/material-design-lite/material.min.css">
+    <script src="../node_modules/material-design-lite/material.min.js"></script>
     <style include="shared-styles">
       :host {
         display: block;
 
         padding: 10px;
       }
+      .row {
+        display: flex;
+      }
+      paper-input {
+        margin-right: 16px;
+        padding-top: 1px;
+      }
+      .mdl-data-table#searchResults {
+        white-space: normal;
+      }
+
+      table {
+        max-width: 100%;
+      }
+
+      tr {
+        cursor: pointer;
+      }
+      td {
+        padding: 4px;
+      }
+
     </style>
 
     <div class="card">
-      <div class="circle">1</div>
-      <h1>View One</h1>
-      <p>Ut labores minimum atomorum pro. Laudem tibique ut has.</p>
-      <p>Lorem ipsum dolor sit amet, per in nusquam nominavi periculis, sit elit oportere ea.Lorem ipsum dolor sit amet, per in nusquam nominavi periculis, sit elit oportere ea.Cu mei vide viris gloriatur, at populo eripuit sit.</p>
+      <h2>Patient Search</h2>
+      <div class="row">
+          <paper-input label="MCP" value="{{patientMCP}}" style="max-width: 200px"></paper-input>
+          <paper-input label="First Name" value="{{patientFirstName}}"></paper-input>
+          <paper-input label="Last Name" value="{{patientLastName}}"></paper-input>
+          <paper-dropdown-menu label="Sex">
+            <paper-listbox slot="dropdown-content" id="gender" attr-for-selected="name">
+              <paper-item name="Female">Female</paper-item>
+              <paper-item name="Male">Male</paper-item>
+              <paper-item name="Unknown">Unknown</paper-item>
+              <paper-item name="All">All</paper-item>
+            </paper-listbox>
+          </paper-dropdown-menu>
+          <button class="standard-button" style="margin-top: 16px; margin-left: 20px" on-click="showResults">Search</button>
+          <button class="standard-button" style="margin-top: 16px; margin-left: 20px" on-click="hideResults">Reset</button>
+      </div>
+      <template is="dom-if" if="[[searchDone]]">
+        <div>
+          <h2>Search Results</h2>
+          <table class="mdl-data-table mdl-js-data-table" id="searchResults">
+            <thead>
+              <tr>
+                <th class="mdl-data-table__cell--non-numeric">MCP</th>
+                <th class="mdl-data-table__cell--non-numeric">Patient Name</th>
+                <th style="width: 150px" class="mdl-data-table__cell--non-numeric">Birth Date</th>
+                <th class="mdl-data-table__cell--non-numeric">Sex</th>
+                <th class="mdl-data-table__cell--non-numeric">Patient Address</th>
+                <th class="mdl-data-table__cell--non-numeric">Email Address</th>
+                <th class="mdl-data-table__cell--non-numeric" style="width: 100px">Cell Phone</th>
+              </tr>
+            </thead>
+            <tbody>
+              <template is="dom-repeat" items="[[patients]]">
+                <tr on-click="goToPatientPage">
+                  <td class="mdl-data-table__cell--non-numeric">[[item.patientIdentifiers.0.clientIdentifier]]</td>
+                  <td class="mdl-data-table__cell--non-numeric">[[item.lastName]], [[item.firstName]]</td>
+                  <td style="width: 150px" class="mdl-data-table__cell--non-numeric">[[item.dateOfBirth]]</td>
+                  <td class="mdl-data-table__cell--non-numeric">[[item.gender]]</td>
+                  <td class="mdl-data-table__cell--non-numeric">
+                    [[item.addressLine1]], [[item.addressLine2]],<br>[[item.municipality]]<br>[[item.provinceState]]<br>
+                  [[item.postalZipCode]]</td>
+                  <td>[[item.firstName]].[[item.lastName]]@gmail.com</td>
+                  <td style="width: 150px">1-506-[[getPhone(item)]]</td>
+                </tr>
+              </template>
+            </tbody>
+          </table>
+        </div>
+      </template>
     </div>
   </template>
 
   <script>
     class MyView1 extends Polymer.Element {
       static get is() { return 'my-view1'; }
+
+      goToPatientPage() {
+        var newUrl = "view4";
+        window.location.href = newUrl;
+      }
+
+      showResults() {
+        setTimeout(function () {
+            this.set('searchDone', true);
+          }.bind(this)
+        , 1000);
+      }
+
+      hideResults() {
+        this.set('searchDone', false);
+      }
+
+      getPhone(item) {
+        let phone = String(Math.floor(Math.random() * 10));
+        phone += String(Math.floor(Math.random() * 10));
+        phone += String(Math.floor(Math.random() * 10));
+        phone += "-";
+        phone += String(Math.floor(Math.random() * 10));
+        phone += String(Math.floor(Math.random() * 10));
+        phone += String(Math.floor(Math.random() * 10));
+        phone += String(Math.floor(Math.random() * 10));
+        return phone;
+      }
+
+      static get properties() {
+        return {
+          searchDone: {
+            type: Boolean,
+            value: false
+          },
+          patients: {
+            type: Array,
+            value: [{"firstName":"MARIANO_TPCHI","middleName":"","lastName":"ANTHONY","dateOfBirth":"26-May-1963","gender":"M","source":"","addressLine1":"235 BYRD AVE","addressLine2":"","municipality":"OPEN HALL","provinceState":"NL","postalZipCode":"A0C 2B0","country":"CA","addressType":"","phoneNumber":"709 876 5696","dateOfExpiry":"","patientIdentifiers":[{"clientIdentifier":"1002726876","clientIdentifierType":"eCID"},{"clientIdentifier":"119631473715","clientIdentifierType":"MCP"}]},{"firstName":"VESTA_TPCHI","middleName":"","lastName":"BROOKS","dateOfBirth":"26-Mar-1956","gender":"O","source":"","addressLine1":"28 NASCOPIE BOULEVARD","addressLine2":"","municipality":"GLOVERTOWN","provinceState":"NL","postalZipCode":"A0G 2L0","country":"CA","addressType":"","phoneNumber":"709 589 5438","dateOfExpiry":"","patientIdentifiers":[{"clientIdentifier":"1002726875","clientIdentifierType":"eCID"},{"clientIdentifier":"189560869670","clientIdentifierType":"MCP"}]},{"firstName":"EDYTH_TPCHI","middleName":"","lastName":"FROST","dateOfBirth":"01-Aug-2017","gender":"F","source":"","addressLine1":"121 NEWFOUNDLAND BLVD","addressLine2":"","municipality":"FLEUR DE LYS","provinceState":"NL","postalZipCode":"A0K 2M0","country":"CA","addressType":"","phoneNumber":"709 616 3197","dateOfExpiry":"","patientIdentifiers":[{"clientIdentifier":"1002726868","clientIdentifierType":"eCID"},{"clientIdentifier":"479723158156","clientIdentifierType":"MCP"}]},{"firstName":"PEG","middleName":"","lastName":"WINNY","dateOfBirth":"23-May-1963","gender":"F","source":"","addressLine1":"75 JETS STREET","addressLine2":"","municipality":"WINNIPEG","provinceState":"MB","postalZipCode":"E1F 6T5","country":"","addressType":"","phoneNumber":"607 343 1127","dateOfExpiry":"","patientIdentifiers":[{"clientIdentifier":"1002717600","clientIdentifierType":"eCID"}]},{"firstName":"CONRAD_TPCHI","middleName":"","lastName":"PRUITT","dateOfBirth":"11-Jan-2018","gender":"M","source":"","addressLine1":"162 HIGHLAND CIRCLE","addressLine2":"","municipality":"GRAND BRUIT","provinceState":"NL","postalZipCode":"A0M 1G0","country":"CA","addressType":"","phoneNumber":"709 579 4196","dateOfExpiry":"","patientIdentifiers":[{"clientIdentifier":"1002726869","clientIdentifierType":"eCID"},{"clientIdentifier":"659653260730","clientIdentifierType":"MCP"}]},{"firstName":"PARIS","middleName":"EUR","lastName":"FRANCE","dateOfBirth":"17-Sep-1929","gender":"F","source":"","addressLine1":"10 TOWER RUE","addressLine2":"","municipality":"PARIS","provinceState":"10","postalZipCode":"A0L 1B0","country":"FR","addressType":"","phoneNumber":"+022 555 34-98-31","dateOfExpiry":"","patientIdentifiers":[{"clientIdentifier":"1002717601","clientIdentifierType":"eCID"}]},{"firstName":"RIDA","middleName":"","lastName":"FLO","dateOfBirth":"01-Apr-1924","gender":"M","source":"","addressLine1":"10 PEACH STREET","addressLine2":"","municipality":"TAMPA","provinceState":"FL","postalZipCode":"34668","country":"US","addressType":"","phoneNumber":"606 563 2211","dateOfExpiry":"","patientIdentifiers":[{"clientIdentifier":"1002717647","clientIdentifierType":"eCID"}]},{"firstName":"KIRBY_TPCHI","middleName":"","lastName":"CAIN","dateOfBirth":"28-Feb-1955","gender":"F","source":"","addressLine1":"86 WABUSH AVE","addressLine2":"","municipality":"RED HARBOUR","provinceState":"NL","postalZipCode":"A0E 2R0","country":"CA","addressType":"","phoneNumber":"709 936 6551","dateOfExpiry":"","patientIdentifiers":[{"clientIdentifier":"1002726867","clientIdentifierType":"eCID"},{"clientIdentifier":"229550598788","clientIdentifierType":"MCP"}]},{"firstName":"KIRBY_TPCHI","middleName":"","lastName":"LLOYD","dateOfBirth":"26-Apr-1972","gender":"M","source":"","addressLine1":"BOX 25404","addressLine2":"","municipality":"BENTON","provinceState":"NL","postalZipCode":"A0G 1C0","country":"CA","addressType":"","phoneNumber":"709 729 7417","dateOfExpiry":"","patientIdentifiers":[{"clientIdentifier":"1002724096","clientIdentifierType":"eCID"},{"clientIdentifier":"499721174310","clientIdentifierType":"MCP"}]},{"firstName":"KIRBY_TPCHI","middleName":"","lastName":"TERRELL","dateOfBirth":"07-Nov-1972","gender":"F","source":"","addressLine1":"257 MAIN ROAD","addressLine2":"","municipality":"BENTON","provinceState":"NL","postalZipCode":"A0G 1C0","country":"CA","addressType":"","phoneNumber":"709 342 9136","dateOfExpiry":"","patientIdentifiers":[{"clientIdentifier":"1002725306","clientIdentifierType":"eCID"},{"clientIdentifier":"369723127725","clientIdentifierType":"MCP"}]},{"firstName":"CORA_TPCHI","middleName":"","lastName":"KHAN","dateOfBirth":"20-Feb-1977","gender":"F","source":"","addressLine1":"46 HIGHLAND RD","addressLine2":"","municipality":"NATUASHISH","provinceState":"NL","postalZipCode":"A0P 1A0","country":"CA","addressType":"","phoneNumber":"709 221 8952","dateOfExpiry":"","patientIdentifiers":[{"clientIdentifier":"1002718433","clientIdentifierType":"eCID"},{"clientIdentifier":"719770515067","clientIdentifierType":"MCP"}]},{"firstName":"KUM_TPCHI","middleName":"","lastName":"DOYLE","dateOfBirth":"22-Feb-1970","gender":"F","source":"","addressLine1":"85 CAROL PLACE","addressLine2":"","municipality":"POSTVILLE","provinceState":"NL","postalZipCode":"A0P 1N0","country":"CA","addressType":"","phoneNumber":"709 985 5134","dateOfExpiry":"","patientIdentifiers":[{"clientIdentifier":"1002721811","clientIdentifierType":"eCID"},{"clientIdentifier":"229700535359","clientIdentifierType":"MCP"}]},{"firstName":"KENA_TPCHI","middleName":"","lastName":"PACE","dateOfBirth":"25-Feb-1962","gender":"F","source":"","addressLine1":"BOX 739","addressLine2":"","municipality":"MINGS BIGHT","provinceState":"NL","postalZipCode":"A0K 3S0","country":"CA","addressType":"","phoneNumber":"709 461 9956","dateOfExpiry":"","patientIdentifiers":[{"clientIdentifier":"1002723806","clientIdentifierType":"eCID"},{"clientIdentifier":"509620566281","clientIdentifierType":"MCP"}]},{"firstName":"CAMIE_TPCHI","middleName":"","lastName":"STAFFORD","dateOfBirth":"17-Jul-1959","gender":"F","source":"","addressLine1":"233 SMALLWOOD RD","addressLine2":"","municipality":"NORTHERN BAY","provinceState":"NL","postalZipCode":"A0A 3B0","country":"CA","addressType":"","phoneNumber":"709 754 6576","dateOfExpiry":"","patientIdentifiers":[{"clientIdentifier":"1002725304","clientIdentifierType":"eCID"},{"clientIdentifier":"419591995628","clientIdentifierType":"MCP"}]},{"firstName":"KENNA_TPCHI","middleName":"","lastName":"NOVAK","dateOfBirth":"05-Feb-1953","gender":"F","source":"","addressLine1":"BOX 24155","addressLine2":"","municipality":"BELLEORAM","provinceState":"NL","postalZipCode":"A0H 1B0","country":"CA","addressType":"","phoneNumber":"709 742 3682","dateOfExpiry":"","patientIdentifiers":[{"clientIdentifier":"1002726150","clientIdentifierType":"eCID"},{"clientIdentifier":"159530366891","clientIdentifierType":"MCP"}]},{"firstName":"IRWIN_TPCHI","middleName":"","lastName":"GOMEZ","dateOfBirth":"22-Jun-1959","gender":"M","source":"","addressLine1":"239 TOPSAIL ROAD","addressLine2":"AGNES PRATT HOME","municipality":"ST JOHNS","provinceState":"NL","postalZipCode":"A1E 2B4","country":"","addressType":"","phoneNumber":"709 752 8950","dateOfExpiry":"","patientIdentifiers":[{"clientIdentifier":"1002726197","clientIdentifierType":"eCID"},{"clientIdentifier":"359591743521","clientIdentifierType":"MCP"}]},{"firstName":"QUINN_TPCHI","middleName":"","lastName":"MARTINEZ","dateOfBirth":"24-Jun-1968","gender":"F","source":"","addressLine1":"7 NEWTOWN STREET","addressLine2":"","municipality":"LUMSDEN","provinceState":"NL","postalZipCode":"A0G 3E0","country":"CA","addressType":"","phoneNumber":"709 737 5687","dateOfExpiry":"","patientIdentifiers":[{"clientIdentifier":"1002726255","clientIdentifierType":"eCID"},{"clientIdentifier":"419681768885","clientIdentifierType":"MCP"}]},{"firstName":"KENNY_TPCHI","middleName":"","lastName":"PETTY","dateOfBirth":"03-Sep-1964","gender":"M","source":"","addressLine1":"98 MAIN AVE","addressLine2":"","municipality":"BLOOMFIELD","provinceState":"NL","postalZipCode":"A0C 1A0","country":"CA","addressType":"","phoneNumber":"709 522 8173","dateOfExpiry":"","patientIdentifiers":[{"clientIdentifier":"1002726243","clientIdentifierType":"eCID"},{"clientIdentifier":"629642471052","clientIdentifierType":"MCP"}]},{"firstName":"KENNY_TPCHI","middleName":"","lastName":"PETTY","dateOfBirth":"03-Sep-1964","gender":"M","source":"","addressLine1":"","addressLine2":"","municipality":"","provinceState":"NL","postalZipCode":"","country":"CAN","addressType":"","phoneNumber":"","dateOfExpiry":"","patientIdentifiers":[{"clientIdentifier":"1002727008","clientIdentifierType":"eCID"}]},{"firstName":"KIMMIE","middleName":"","lastName":"TAPE","dateOfBirth":"10-Oct-2002","gender":"F","source":"","addressLine1":"20 CORDAGE PLACE","addressLine2":"","municipality":"","provinceState":"","postalZipCode":"","country":"","addressType":"","phoneNumber":"709 334 5566","dateOfExpiry":"","patientIdentifiers":[{"clientIdentifier":"2732","clientIdentifierType":"eCID"}]},{"firstName":"KINE","middleName":"","lastName":"DIOP","dateOfBirth":"24-Jan-2000","gender":"M","source":"","addressLine1":"","addressLine2":"","municipality":"","provinceState":"","postalZipCode":"","country":"","addressType":"","phoneNumber":"","dateOfExpiry":"","patientIdentifiers":[{"clientIdentifier":"1002705743","clientIdentifierType":"eCID"}]}]
+          }
+        }
+      }
     }
 
     window.customElements.define(MyView1.is, MyView1);
