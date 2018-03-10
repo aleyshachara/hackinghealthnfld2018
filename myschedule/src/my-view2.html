@@ -10,6 +10,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="shared-styles.html">
+<link rel="import" href="../bower_components/paper-slider/paper-slider.html">
+<link rel="import" href="../bower_components/paper-progress/paper-progress.html">
+<link rel="import" href="../bower_components/paper-toggle-button/paper-toggle-button.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../bower_components/paper-styles/paper-styles.html">
+<link rel="import" href="../bower_components/paper-radio-group/paper-radio-group.html">
+<link rel="import" href="../bower_components/paper-radio-button/paper-radio-button.html">
+
 
 <dom-module id="my-view2">
   <template>
@@ -23,9 +32,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <div class="card">
       <div class="circle">2</div>
-      <h1>View Two</h1>
-      <p>Ea duis bonorum nec, falli paulo aliquid ei eum.</p>
-      <p>Id nam odio natum malorum, tibique copiosae expetenda mel ea.Detracto suavitate repudiandae no eum. Id adhuc minim soluta nam.Id nam odio natum malorum, tibique copiosae expetenda mel ea.</p>
+      <h1>Special Criteria:</h1>
+      <paper-input always-float-label label="Travel Time"></paper-input>
+      <paper-input always-float-label label="Prep Time"></paper-input>
+      <label id="label1">Other Appointments:</label>
+      <paper-radio-group aria-labelledby="label1">
+        <paper-radio-button name="yes">yes</paper-radio-button>
+        <paper-radio-button name="no">no</paper-radio-button>
+      </paper-radio-group>
+      <br>
+       <label id="label1">Rheumatology Score:</label>
+      <paper-radio-group aria-labelledby="label1">
+        <paper-radio-button name="low">low</paper-radio-button>
+        <paper-radio-button name="medium">medium</paper-radio-button>
+        <paper-radio-button name="high">high</paper-radio-button>
+        
+      </paper-radio-group>
+    
     </div>
   </template>
 
