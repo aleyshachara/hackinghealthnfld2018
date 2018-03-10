@@ -10,6 +10,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/scheduler-component/scheduler-component.html">
+<link rel="import" href="../bower_components/scheduler-component/category-element.html">
+<link rel="import" href="../bower_components/scheduler-component/categories-element.html">
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="my-view6">
@@ -25,15 +28,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <div class="card">
       <h2>Scheduler</h2>
       <div class="calendar">
+        <paper-dialog opened>
         <scheduler-component
           default-view="month"
           event-color="#8e44ad"
           text-color="#ecf0f1"
           events='[
-            {"title" : "event1","start" : "2018-03-06"},
-            {"title" : "event2","start" : "2018-03-12","end" : "2018-03-14"},
-            {"title" : "event3","start" : "2018-03-15T12:30:00","allDay" :false}]'>
+            {"title" : "event1","start" : "2018-03-06", "category": "Recommended"},
+            {"title" : "event1","start" : "2018-03-06", "category": "Alternate"},
+            {"title" : "event2","start" : "2018-03-12", "category": "Alternate"},
+            {"title" : "event3","start" : "2018-03-15T12:30:00","allDay" :false, "category": "Existing"}]'
+           categories='[{ "label": "Recommended", "color": "#85B454","hidden":false },
+                       { "label": "Alternate", "color": "#cccccc","hidden":false },
+                       { "label": "Existing", "color": "#4054B2","hidden":false }]'
+            >
         </scheduler-component>
+      </paper-dialog>
       </div>
     </div>
   </template>
