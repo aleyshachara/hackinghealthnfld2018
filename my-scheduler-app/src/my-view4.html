@@ -1,0 +1,755 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="my-view4">
+  <template>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+    <style include="shared-styles">
+      :host {
+        display: block;
+
+        padding: 10px;
+      }
+      .column {
+        border: 1px solid blue;
+      }
+      .draggableItem {
+        text-align: center;
+        cursor: move;
+        background-color: pink;
+        margin: 2px;
+      }
+      .draggableCardiologist {
+        text-align: center;
+        cursor: move;
+        background-color: lightyellow;
+        margin: 2px;
+      }
+
+      .draggableCardiologist:hover {
+        background-color: yellow;
+      }
+
+      .draggableItem:hover {
+        background-color: hotpink;
+      }
+
+      .target {
+        color: lavender;
+        text-align: center;
+        background-color:white;
+        border: 1px dotted lightblue;
+        height:30px;
+      }
+
+      .cardioOver {
+        border: 1px dashed black;
+      }
+
+      .target.over {
+        border: 2px dashed #000;
+      }
+      [draggable] {
+        user-select: none;
+      }
+
+      .room {
+        text-align: center;
+      }
+
+      .cardiologist {
+        border: 1px dotted grey;
+        color: lavender;
+        text-align: center;
+      }
+
+      .scheduled {
+        background-color: powderblue;
+        border: 2px solid white;
+        cursor: move;
+      }
+
+      #errorDialog paper-dialog {
+        padding: 16px;
+        border: 1px solid red;
+      }
+
+      button {
+        background-color: lightblue;
+        padding: 8px;
+      }
+
+      .blank {
+        background-color: coral;
+        text-align: center;
+        cursor: move;
+        border: 2px solid white;
+      }
+
+      .tabs__panel {
+        display: none;
+        height: 225px;
+        overflow: scroll;
+      }
+
+      .is-active {
+        display: block;
+      }
+
+      .mdl-tabs__tab:hover {
+        background-color: red;
+        cursor: pointer;
+      }
+
+      .mdl-tabs__tab.is-active {
+        background-color: black;
+        color: white;
+      }
+
+      .mdl-tabs__tab.is-active:hover {
+        background-color: red;
+        cursor: pointer;
+      }
+
+      .cardioFilled {
+        background-color: darkseagreen;
+        color: white;
+        border: 2px solid white;
+      }
+     
+      .draggableCardio {
+        cursor: move;
+      }
+
+    </style>
+
+    <div class="card">
+      <div class="mdl-grid">
+        <div class="mdl-cell mdl-cell--1-col">
+          <div class="circle">4</div>
+        </div>
+        <div class="mdl-cell mdl-cell--11-col">
+          <h3>HTML5 from Scratch</h3>
+        </div>
+        <div class="mdl-cell mdl-cell--9-col">
+         <div class="mdl-grid mdl-grid--no-spacing">
+          <div class="mdl-cell mdl-cell--3-col column" id="room1">
+            <div class="room">Room 1</div>
+            <div class="cardiologist " id="cardiologist1" name="Room 1"
+            on-drop="handleDropped" on-dragenter="addBorder" on-dragleave="removeBorder"
+              on-dragover="handleDragOver" on-dragstart="handleDragStart">Cardiologist</div> 
+            <template is="dom-repeat" items="{{slots1}}">
+              <div class="target room" on-drop="handleDropped" on-dragenter="addBorder" on-dragleave="removeBorder"
+              on-dragover="handleDragOver" on-dragstart="handleDragStart" name="{{item.time}}" on-click="popUp">
+                <div class="droppable">[[item.type]] - [[item.time]]</div>
+                <div class="scheduled" style="display:none;" ></div>
+              </div>
+            </template>
+          </div>
+          <div class="mdl-cell mdl-cell--3-col column" id="room2">
+            <div class="room">Room 2</div>
+            <div class="cardiologist " id="cardiologist2" name="Room 2"
+            on-drop="handleDropped" on-dragenter="addBorder" on-dragleave="removeBorder"
+              on-dragover="handleDragOver" on-dragstart="handleDragStart">Cardiologist</div>
+            <template is="dom-repeat" items="{{slots2}}">
+              <div class="target room" on-drop="handleDropped" on-dragenter="addBorder" on-dragleave="removeBorder"
+              on-dragover="handleDragOver" on-dragstart="handleDragStart" name="{{item.time}}" on-click="popUp">
+              <div class="droppable">[[item.type]] - [[item.time]]</div>
+              <div class="scheduled" style="display:none;">
+                
+              </div>
+              </div>
+            </template>
+          </div>
+          <div class="mdl-cell mdl-cell--3-col column" id="room3"> 
+            <div class="room">Room 3</div>
+            <div class="cardiologist " id="cardiologist3" name="Room 3"
+            on-drop="handleDropped" on-dragenter="addBorder" on-dragleave="removeBorder"
+              on-dragover="handleDragOver" on-dragstart="handleDragStart">Cardiologist</div>
+            <template is="dom-repeat" items="{{slots3}}">
+              <div class="target room" on-drop="handleDropped" on-dragenter="addBorder" on-dragleave="removeBorder"
+              on-dragover="handleDragOver" on-dragstart="handleDragStart" name="{{item.time}}" on-click="popUp">
+              <div class="droppable">[[item.type]] - [[item.time]]</div>
+              <div class="scheduled" style="display:none;"></div>
+              </div>
+            </template>
+          </div>
+          <div class="mdl-cell mdl-cell--3-col column" id="room4">
+            <div class="room">Prep Recovery</div> 
+            <div class="cardiologist " id="cardiologist4" name="Room 4"
+            on-drop="handleDropped" on-dragenter="addBorder" on-dragleave="removeBorder"
+              on-dragover="handleDragOver" on-dragstart="handleDragStart">Cardiologist</div>
+            <template is="dom-repeat" items="{{slots4}}">
+              <div class="target room"  on-drop="handleDropped" on-dragenter="addBorder" on-dragleave="removeBorder"
+              on-dragover="handleDragOver" on-dragstart="handleDragStart" name="{{item.time}}" on-click="popUp">
+              <div class="droppable">[[item.type]] - [[item.time]]</div>
+              <div class="scheduled" style="display: none;"></div>
+              </div>
+            </template>
+          </div>
+         </div>
+        </div>
+        <div class="mdl-cell mdl-cell--3-col column" id="patients">
+          <div class="mdl-tabs mdl-js-tabs">
+            <div class="mdl-tabs__tab-bar">
+              <a  class = "mdl-tabs__tab is-active" on-click="toggleDraggables" id="patientTab">Patients</a>
+              <a  class="mdl-tabs__tab" on-click="toggleDraggables" id="cardiologistTab">Cardiologists</a>
+            </div>
+            <div class="tabs__panel is-active" id = "tab1">
+              <template is="dom-repeat" items="{{patients}}">
+                 <div id="{{item.name}}" name="{{item.type}}" draggable="true" class="draggableItem" 
+                 on-dragstart="handleDragStart" on-drop="handleDropped">[[item.name]] ([[item.effort]])</div>
+              </template>
+            </div>
+            <div class="tabs__panel" id = "tab2">
+              <template is="dom-repeat" items="{{cardiologists}}">
+                <div id="{{item.name}}" draggable="true" class="draggableCardiologist"
+                on-dragstart="handleDragStart" on-drop="handleDropped">[[item.name]]</div>
+              </template>
+            </div>
+          </div>
+        </div>
+        <div class="mdl-cell mdl-cell--9-col">
+          <button on-click="printSchedule">Save/Update Schedule</button>
+        </div>
+        <div class="mdl-cell mdl-cell--3-col column" id="blankProcedures">
+            <template is="dom-repeat" items="{{procedureTypes}}">
+              <div class="blank" id="{{item.code}}" draggable="true" on-dragstart="handleDragStart"
+              on-drop="handleDropped">[[item.desc]]</div>
+            </template>
+        </div>
+        <div class="mdl-cell mdl-cell--12-col">
+          <h5>Schedule</h5>
+          <template is="dom-repeat" items="{{appointments}}" sort="sortAppointments">
+              <div>[[item.name]] - Start: [[item.time]], Room: [[item.room]]</div>
+          </template>
+        </div>
+      </div>
+    </div>
+    <paper-dialog id="errorDialog">
+        <template is="dom-repeat" items="{{errors}}">
+            <div>[[item]]</div>
+        </template>
+        <div style="display: flex">
+          <div class="mdl-layout-spacer"></div>
+          <button dialog-dismiss>OK</button>
+        </div>
+    </paper-dialog>
+    <paper-dialog id="deleteDialog" style="width: 500px; max-height: 500px;">
+      <div class="mdl-grid">
+        <div class="mdl-cell mdl-cell--12-col">
+          <paper-input label="Last Name, First Name" always-float-label value="{{patientName}}"></paper-input>
+        </div>
+        <div class="mdl-cell mdl-cell--6-col">
+          <paper-input label="MCP" always-float-label value="123456789011"></paper-input>
+        </div>
+        <div class="mdl-cell mdl-cell--6-col">
+          <paper-input label="Procedure Type" always-float-label value="Interventional Cardiology"></paper-input>
+        </div>
+        <div class="mdl-cell mdl-cell--3-col">
+          <paper-input label="Effort" always-float-label value="{{patientEffort}}"></paper-input>
+        </div>
+        <div class="mdl-cell mdl-cell--9-col"></div>
+        <div class="mdl-cell mdl-cell--4-col">
+          <paper-input label="Procedure Date" always-float-label value="{{patientDate}}" disabled></paper-input>
+        </div>
+        <div class="mdl-cell mdl-cell--4-col">
+          <paper-input label="Procedure Room" always-float-label value="{{patientRoom}}" disabled></paper-input>
+        </div>
+        <div class="mdl-cell mdl-cell--4-col">
+          <paper-input label="Procedure Time" always-float-label value="{{patientTime}}" disabled></paper-input>
+        </div>
+      </div>
+        <div style="display: flex;">
+            <div class="mdl-layout-spacer"></div>
+            <button on-click="openWarning">Unschedule</button>
+        </div>
+    </paper-dialog>
+    <paper-dialog id="scheduleBlank" style="width: 500px; max-height: 500px;">
+      <div class="mdl-grid">
+        <div class="mdl-cell mdl-cell--12-col">
+          <paper-input label="Last Name, First Name" always-float-label value="{{potential.name}}"></paper-input>
+        </div>
+        <div class="mdl-cell mdl-cell--6-col">
+          <paper-input label="MCP" always-float-label value="{{potential.mcp}}"></paper-input>
+        </div>
+        <div class="mdl-cell mdl-cell--6-col">
+          <paper-input label="Procedure Type" always-float-label value="{{potential.type}}"></paper-input>
+        </div>
+        <div class="mdl-cell mdl-cell--3-col">
+          <paper-input id="effort" label="Effort" always-float-label value="{{potential.effort}}"
+          auto-validate pattern="^[1-7]$" error-message="1-7 only!"></paper-input>
+        </div>
+        <div class="mdl-cell mdl-cell--9-col"></div>
+        <div class="mdl-cell mdl-cell--4-col">
+          <paper-input label="Procedure Date" always-float-label value="{{potential.date}}" disabled></paper-input>
+        </div>
+        <div class="mdl-cell mdl-cell--4-col">
+          <paper-input label="Procedure Room" always-float-label value="{{potential.room}}" disabled></paper-input>
+        </div>
+        <div class="mdl-cell mdl-cell--4-col">
+          <paper-input label="Procedure Time" always-float-label value="{{potential.time}}" disabled></paper-input>
+        </div>
+      </div>
+        <div style="display: flex;">
+            <div class="mdl-layout-spacer"></div>
+            <button on-click="addBlank">Apply</button>
+        </div>
+    </paper-dialog>
+    <paper-dialog id="warningDialog" style="width: 350px; padding: 16px;">
+      <h4 style="color: orange;">Are you sure you want to unschedule this appointment? This action can not be undone.</h4>
+      <button on-click="sendAppointmentBack" dialog-confirm>Yes, unschedule the appointment</button>
+      <button dialog-dismiss on-click="closeDelete">Cancel</button>
+    </paper-dialog>
+  </template>
+
+  <script>
+    class MyView4 extends Polymer.Element {
+      static get is() { return 'my-view4'; }
+
+      toggleDraggables() {
+        if(this.$.patientTab.classList.contains('is-active')){
+          this.$.cardiologistTab.classList.add('is-active');
+          this.$.patientTab.classList.remove('is-active');
+          this.$.tab1.classList.remove('is-active');
+          this.$.tab2.classList.add('is-active');
+        }else{
+          this.$.cardiologistTab.classList.remove('is-active');
+          this.$.patientTab.classList.add('is-active');
+          this.$.tab1.classList.add('is-active');
+          this.$.tab2.classList.remove('is-active');
+        }
+      }
+
+      sortAppointments(a, b) {
+        return a.room < b.room ? -1 : 1;
+      }
+
+      handleDropped() {
+        event.preventDefault();
+        event.stopPropagation();
+        console.log(event);
+        var parentNode = event.target.parentNode;
+        var hiddenDiv = event.target.nextElementSibling;
+        if(event.model)
+          var appointment = event.model.item;
+        console.log(this.source.classList);
+        if(!this.source.classList.contains('draggableCardio'))
+          var patient = JSON.parse(event.dataTransfer.getData("text/plain"));
+        
+        if(event.target.classList.contains("droppable") && (!this.source.classList.contains("blank"))
+          && (!this.source.classList.contains("draggableCardiologist"))){
+          //if the slot is unscheduled, schedule the appointment
+          if(!appointment.scheduled){
+           
+            //check if appointment can fit in slot
+            var appointmentFits = true;
+            var itemIndex = event.model.index;
+            var roomSlots = event.path[2].lastElementChild.items;
+
+            if(patient.effort > 1){
+              //if the space for the appointment doesn't exist, or is already filled
+              for(var i=0; i<patient.effort; i++){
+                if((roomSlots[itemIndex + i] === undefined)|| (roomSlots[itemIndex + i].scheduled))
+                  appointmentFits = false;
+              }
+            }
+
+            if(appointmentFits){
+               appointment.scheduled = true;
+               
+               appointment.name = patient.name;
+               appointment.effort = patient.effort;
+
+               //find the divs to hide
+               var visibleDivs = parentNode.parentNode.querySelectorAll(".target.room");
+               var indexOfStartDiv = -1;
+               //get the index of the first div to hide
+               for(var i=0; i<visibleDivs.length; i++){
+                if(visibleDivs[i].classList.contains('over'))
+                  indexOfStartDiv = i;
+               }
+               //hide the appropriate divs. Mark the appointments as scheduled.
+               for(var i=1; i<patient.effort; i++){
+                if(!(visibleDivs[indexOfStartDiv + i] === undefined)){
+                    visibleDivs[indexOfStartDiv + i].style.display = "none";
+                    //roomSlots[itemIndex + i].scheduled = true;
+                }
+               }
+               event.target.style.display = "none";
+
+               //set the appropriate height for the hiddenDiv
+               var height = 30 * patient.effort
+               hiddenDiv.style.height = height + "px";
+
+               hiddenDiv.innerHTML = patient.name + " " + appointment.time;
+
+               //add the other times to the innerHTML
+               for(var i=1; i<patient.effort; i++){
+                hiddenDiv.innerHTML += (" & " + roomSlots[itemIndex + i].time);
+               }
+               hiddenDiv.classList.add("reschedule");
+               hiddenDiv.draggable = true;
+               hiddenDiv.style.display = "block";
+
+               if(!this.source.classList.contains("reschedule")){
+                this.source.style.display = "none";
+              }else{
+                //reset the source div
+                this.source.classList.remove("reschedule");
+                this.source.draggable = false;
+                this.source.style.display = "none";
+                this.sourceItem.scheduled = false;
+                this.sourceItem.name = null;
+                this.sourceItem.effort = null;
+
+                //reset the current element.
+                var sibling = this.source.parentNode.firstElementChild;
+                sibling.style.display = "block";
+                this.source.parentNode.classList.add("target");
+
+                //reset any elements hidden by longer appointments
+                var resetElement = this.source.parentNode.nextElementSibling;
+                for(var i=1; i<patient.effort; i++){
+                    resetElement.style.display = "block";
+                    resetElement = resetElement.nextElementSibling;
+                }
+              }
+
+               parentNode.classList.remove('target');
+
+            }else{
+              this.errors = [];
+              this.push('errors', "Oops, this appointment is too long to be scheduled in this time block.");
+              this.$.errorDialog.open();
+            }
+            
+          }else{
+            this.errors = [];
+            this.push('errors', "There is already an appointment scheduled in this time block.");
+            this.push('errors', "Please try another block or move the existing appointment.");
+            this.$.errorDialog.open();
+          }
+          parentNode.classList.remove('over');
+        }else if(event.target.classList.contains("reschedule")){
+            this.errors = [];
+            this.push('errors', "There is already an appointment scheduled in this time block.");
+            this.push('errors', "Please try another block or move the existing appointment.");
+            this.$.errorDialog.open();
+        }else if(this.source.classList.contains("blank")){
+          parentNode.classList.remove('over');
+          if(event.target.classList.contains("droppable")){
+            
+            if(!appointment.scheduled){
+              this.set('potential', {});
+              this.set('potential.type', this.source.innerHTML);
+              this.set('potential.time', appointment.time);
+              this.set('potential.date', new Date().toDateString());
+              this.set('potential.room', appointment.room);
+              this.set('potential.target', event.target);
+              this.set('potential.item', appointment);
+              var roomSlots = event.path[2].lastElementChild.items;
+              var maxEffort = 1;
+              for(var i=event.model.index+1; i<roomSlots.length; i++){
+                if(!roomSlots[i].scheduled)
+                  maxEffort += 1;
+                else
+                  i = roomSlots.length + 1;
+              }
+              this.set('potential.maxEffort', maxEffort);
+              this.$.scheduleBlank.open();
+            }
+          }
+        }else if(this.source.classList.contains("draggableCardiologist")){
+          if(event.target.classList.contains("cardiologist") && (!event.target.classList.contains("cardioFilled"))){
+            event.target.innerHTML = this.sourceItem.name;
+            event.target.style.border = "2px solid white";
+            event.target.classList.add("cardioFilled");
+            this.sourceItem.room = event.target.name;
+            this.source.style.display = "none";
+            event.target.classList.add("draggableCardio");
+            event.target.classList.remove("draggableCardiologist");
+            event.target.draggable = true;
+          }
+          parentNode.classList.remove('over');
+        }else if(this.source.classList.contains("draggableCardio")){
+          console.log("Yes");
+          if(event.target.classList.contains("cardiologist") && (!event.target.classList.contains("cardioFilled"))){
+
+          }
+          parentNode.classList.remove('over');
+        }
+
+      }
+
+      addBlank() {
+        if(this.validateBlank()){
+          console.log(this.potential.target.parentNode.parentNode);
+          var item = this.potential.item;
+          item.scheduled = true;
+          item.effort = this.potential.effort;
+          item.name = this.potential.name;
+          console.log(item);
+
+          var visibleDivs = this.potential.target.parentNode.parentNode.querySelectorAll(".target");
+          var itemIndex = -1;
+
+          for(var i=0; i<visibleDivs.length; i++){
+            if(visibleDivs[i].__dataHost.__data.item.time == this.potential.item.time)
+              itemIndex = i;
+          }
+          var parentNode = visibleDivs[itemIndex];
+
+          var scheduledBlock = parentNode.querySelector(".scheduled");
+          scheduledBlock.classList.add("reschedule");
+          var height = 30*this.potential.effort;
+          scheduledBlock.style.height = height + "px";
+          scheduledBlock.innerHTML = item.name + " " + item.time;
+
+          //hide the appropriate divs
+          for(var i=0; i<this.potential.effort; i++){ 
+            if( i > 0){
+              scheduledBlock.innerHTML += " & " + visibleDivs[itemIndex + i].__dataHost.__data.item.time;
+              visibleDivs[itemIndex + i].style.display = "none";
+            }else{
+              visibleDivs[itemIndex + i].querySelector(".droppable").style.display = "none";
+            }
+
+          }
+
+          parentNode.classList.remove("target");
+          scheduledBlock.draggable = true;
+          scheduledBlock.style.display = "block";
+          this.$.scheduleBlank.close();
+        }else{
+          this.$.errorDialog.open();
+        }
+
+      }
+
+      validateBlank() {
+        this.errors = [];
+        if(typeof(this.potential.name) == "undefined")
+          this.push('errors', "Please enter a name for the appointment you are scheduling.");
+        if(typeof(this.potential.effort) == "undefined")
+          this.push('errors', "Please enter an effort in hours for the appointment you are scheduling.");
+        if(this.$.effort.invalid)
+          this.push('errors', "Effort must be entered in whole numbers.");
+        if(!this.$.effort.invalid){
+          if(this.potential.effort > this.potential.maxEffort)
+            this.push('errors', "Oops, looks like an appointment this large will not fit in this time block.");
+        }
+        return this.errors.length == 0;
+      }
+
+      handleDragOver() {
+        event.preventDefault();
+        event.dataTransfer.dropEffect = "move";
+      }
+
+      handleDragStart() {
+        this.source = event.target;
+        if(this.source.classList.contains("reschedule") || this.source.classList.contains("draggableCardiologist")){
+          this.sourceItem = event.model.item;
+        }
+        var patient = "";
+        if(event.model)
+          patient = JSON.stringify(event.model.item);
+        else
+          patient = this.source.innerHTML;
+        event.dataTransfer.setData("text/plain", patient);
+        event.dataTransfer.effectAllowed = "move";
+      }
+
+      addBorder() {
+        if(event.target.classList.contains('cardiologist') && this.source.classList.contains("draggableCardiologist")
+          &&(!event.target.classList.contains("cardioFilled")))
+          event.target.style.border = "2px dashed black";
+        else if(!this.source.classList.contains("draggableCardiologist"))
+          event.path[1].classList.add('over');
+        event.preventDefault();
+      }
+
+      removeBorder() {
+        if(this.source.classList.contains("draggableCardiologist") && event.target.classList.contains("cardiologist")
+          &&(!event.target.classList.contains("cardioFilled")))
+          event.target.style.border = "1px dotted grey";
+        else if(!this.source.classList.contains("draggableCardiologist"))
+          event.path[1].classList.remove('over');
+      }
+
+      popUp() {
+        this.deleteDiv = event.target;
+        this.unscheduleItem = event.model.item;
+        this.patientName = event.model.item.name;
+        this.patientEffort = event.model.item.effort;
+        this.patientTime = event.model.item.time;
+        this.patientDate = new Date().toDateString();
+        this.patientRoom = event.path[2].id;
+        this.$.deleteDialog.open();
+      }
+
+      sendAppointmentBack() {
+        var unscheduled = this.$.patients.querySelectorAll(".draggableItem");
+        for(var i=0; i<unscheduled.length; i++){
+          if(unscheduled[i].id == this.patientName)
+            unscheduled[i].style.display = "block";
+        }
+
+        //reset the source div
+        this.deleteDiv.classList.remove("reschedule");
+        this.deleteDiv.draggable = false;
+        this.deleteDiv.style.display = "none";
+        this.unscheduleItem.scheduled = false;
+        this.unscheduleItem.name = null;
+        
+
+        //reset the current element.
+        var sibling = this.deleteDiv.parentNode.firstElementChild;
+        sibling.style.display = "block";
+        this.deleteDiv.parentNode.classList.add("target");
+
+        //reset any elements hidden by longer appointments
+        var resetElement = this.deleteDiv.parentNode.nextElementSibling;
+        for(var i=1; i<this.unscheduleItem.effort; i++){
+          resetElement.style.display = "block";
+          resetElement = resetElement.nextElementSibling;
+        }
+        this.unscheduleItem.effort = null;
+        this.$.deleteDialog.close();
+      }
+
+      openWarning() {
+        this.$.warningDialog.open();
+      }
+
+      closeDelete() {
+        this.$.deleteDialog.close();
+      }
+
+      printSchedule() {
+        this.appointments = [];
+        for(var i=0; i<this.slots1.length; i++){
+          if(this.slots1[i].scheduled)
+            this.push('appointments', this.slots1[i]);
+          if(this.slots2[i].scheduled)
+            this.push('appointments', this.slots2[i]);
+          if(this.slots3[i].scheduled)
+            this.push('appointments', this.slots3[i]);
+          if(this.slots4[i].scheduled)
+            this.push('appointments', this.slots4[i]);
+        }
+      }
+
+      static get properties() {
+        return {
+          patients: {
+            type: Array,
+            value: [
+              {"name" : "O'Brien, Randy", "effort": 2},
+              {"name" : "Reynolds, George", "effort": 1},
+              {"name" : "Abernathy, Mary", "effort": 3},
+              {"name" : "Briggs, Susan", "effort": 1},
+              {"name" : "Thomas, Ralph", "effort": 2},
+              {"name" : "Fields, June", "effort": 1},
+              {"name" : "Smith, Robert", "effort": 1},
+              {"name" : "MacDonald Lisa", "effort": 1},
+              {"name" : "Stratton, Francis", "effort": 2},
+              {"name" : "Mullin, Arthur", "effort": 1}
+            ]
+          },
+          slots1: {
+            type: Array,
+            value: [
+              { "type": "Outpatient", "time": "8:00am", "scheduled": false, "room": "Room 1"},
+              { "type": "Outpatient", "time": "9:00am", "scheduled": false, "room": "Room 1"},
+              { "type": "Outpatient", "time": "10:00am", "scheduled": false, "room": "Room 1"},
+              {"type" : "Inpatient", "time": "11:00am", "scheduled": false, "room": "Room 1"},
+              { "type": "Inpatient", "time": "12:00pm", "scheduled": false, "room": "Room 1"},
+              { "type": "Inpatient", "time": "1:00pm", "scheduled": false, "room": "Room 1"},
+              { "type": "Inpatient", "time": "2:00pm", "scheduled": false, "room": "Room 1"}
+            ]
+          },
+          slots2: {
+            type: Array,
+            value: [
+              { "type": "Outpatient", "time": "8:00am", "scheduled": false, "room": "Room 2"},
+              { "type": "Outpatient", "time": "9:00am", "scheduled": false, "room": "Room 2"},
+              { "type": "Outpatient", "time": "10:00am", "scheduled": false, "room": "Room 2"},
+              { "type": "Inpatient", "time": "11:00am", "scheduled": false, "room": "Room 2"},
+              { "type": "Inpatient", "time": "12:00pm", "scheduled": false, "room": "Room 2"},
+              { "type": "Inpatient", "time": "1:00pm", "scheduled": false, "room": "Room 2"},
+              { "type": "Inpatient", "time": "2:00pm", "scheduled": false, "room": "Room 2"}
+            ]
+          },
+          slots3: {
+            type: Array,
+            value: [
+              { "type": "Outpatient", "time": "8:00am", "scheduled": false, "room": "Room 3"},
+              { "type": "Outpatient", "time": "9:00am", "scheduled": false, "room": "Room 3"},
+              { "type": "Outpatient", "time": "10:00am", "scheduled": false, "room": "Room 3"},
+              { "type": "Inpatient", "time": "11:00am", "scheduled": false, "room": "Room 3"},
+              { "type": "Inpatient", "time": "12:00pm", "scheduled": false, "room": "Room 3"},
+              { "type": "Inpatient", "time": "1:00pm", "scheduled": false, "room": "Room 3"},
+              { "type": "Inpatient", "time": "2:00pm", "scheduled": false, "room": "Room 3"}
+            ]
+          },
+          slots4: {
+            type: Array,
+            value: [
+              { "type": "Outpatient", "time": "8:00am", "scheduled": false, "room": "Room 4"},
+              { "type": "Outpatient", "time": "9:00am", "scheduled": false, "room": "Room 4"},
+              { "type": "Outpatient", "time": "10:00am", "scheduled": false, "room": "Room 4"},
+              { "type": "Inpatient", "time": "11:00am", "scheduled": false, "room": "Room 4"},
+              { "type": "Inpatient", "time": "12:00pm", "scheduled": false, "room": "Room 4"},
+              { "type": "Inpatient", "time": "1:00pm", "scheduled": false, "room": "Room 4"},
+              { "type": "Inpatient", "time": "2:00pm", "scheduled": false, "room": "Room 4"}
+            ]
+          },
+          procedureTypes : {
+            type: Array,
+            value: [
+              {"code" : "intCar", "desc" : "Interventional Cardiology"},
+              {"code" : "electPhys", "desc" : "Electrophysiology"},
+              {"code" : "echoCar", "desc" : "Echocardiography"}
+            ]
+          },
+          cardiologists : {
+            type: Array,
+            value: [
+              {"name": "Dr. Joe Green", "room": null},
+              {"name": "Dr. Harry Lynch", "room": null},
+              {"name": "Dr. June O'Grady", "room": null},
+              {"name": "Dr. Mark Jones", "room": null},
+              {"name": "Dr. Mary Matthews", "room": null},
+              {"name": "Dr. Mark Jones", "room": null},
+              {"name": "Dr. Percy Grant", "room": null}
+            ]
+          },
+          dragOverArray: {
+            type: Array,
+            value: []
+          },
+          appointments: {
+            type: Array,
+            value: []
+          },
+          errors: {
+            type: Array,
+            value: []
+          },
+          potential: {
+            type: Object,
+            value: {}
+          }
+        }
+      }
+    }
+
+    window.customElements.define(MyView4.is, MyView4);
+  </script>
+</dom-module>

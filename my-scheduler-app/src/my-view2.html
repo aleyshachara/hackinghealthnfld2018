@@ -1,0 +1,89 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="shared-styles.html">
+<link rel="import" href="../bower_components/full-calendar-wrapper/full-calendar-wrapper.html">
+
+<dom-module id="my-view2">
+  <link rel="import" type="css" href="../bower_components/fullcalendar/dist/fullcalendar.min.css">
+  <template>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+  <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+
+    <style include="shared-styles">
+      :host {
+        display: block;
+
+        padding: 10px;
+      }
+    </style>
+
+
+    <div id='calendar'></div>
+  </template>
+
+  <script>
+    class MyView2 extends Polymer.Element {
+      static get is() { return 'my-view2'; }
+
+      addEvent() {
+        var newEvent = {
+                  title: 'All Day Event',
+                  start: '2018-01-01'
+                };
+        this.push('appointments', newEvent);
+        this.calendar.fullCalendar('removeEvents');
+        this.calendar.fullCalendar('addEventSource', this.appointments);
+        this.calendar.fullCalendar('rerenderEvents');
+      }
+
+      initialize() {
+        let calendar = this.$.calendar;
+        this.calendar = jQuery(calendar);
+        this.calendar.fullCalendar({
+          schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
+          defaultView: this.defaultView,
+          editable: false,
+          events: this.appointments,
+          lazyFetching: false,
+          weekends: false,
+          eventLimit: true,
+          height: "auto",
+          allDaySlot: false,
+          minTime: "07:00:00",
+          maxTime: "15:00:00"
+        });
+      }
+
+      static get properties() {
+        return {
+          calendar : {
+            type: Object
+          },
+          defaultView: {
+            type: String
+          },
+          appointments: {
+            type: Array,
+            value: [],
+            notify: true
+          }
+        }
+      }
+
+      ready() {
+        super.ready();        
+      }
+    }
+    window.customElements.define(MyView2.is, MyView2);
+  </script>
+</dom-module>

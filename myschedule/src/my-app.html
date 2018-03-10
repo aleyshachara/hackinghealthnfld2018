@@ -1,0 +1,344 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/app-layout/app-drawer/app-drawer.html">
+<link rel="import" href="../bower_components/app-layout/app-drawer-layout/app-drawer-layout.html">
+<link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
+<link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html">
+<link rel="import" href="../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
+<link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../bower_components/app-route/app-location.html">
+<link rel="import" href="../bower_components/app-route/app-route.html">
+<link rel="import" href="../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../bower_components/iron-selector/iron-selector.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="my-icons.html">
+
+<link rel="lazy-import" href="my-view1.html">
+<link rel="lazy-import" href="my-view2.html">
+<link rel="lazy-import" href="my-view3.html">
+<link rel="lazy-import" href="my-view404.html">
+
+<dom-module id="my-app">
+  <template>
+    <style>
+      :host {
+        --app-primary-color: #3f51b5;
+        --app-secondary-color: black;
+        display: block;
+      }
+
+      app-header-layout {
+        background-color: #f6f6f6;
+      }
+
+      app-drawer-layout:not([narrow]) [drawer-toggle] {
+        display: none;
+      }
+
+      app-header {
+        color: #fff;
+        background-color: var(--app-primary-color);
+      }
+
+      app-header paper-icon-button {
+        --paper-icon-button-ink-color: white;
+      }
+
+      app-toolbar {
+        padding-left: 0;
+      }
+
+      .drawer-list {
+        margin: 0 20px;
+      }
+
+      .drawer-list a {
+        display: block;
+        padding: 0 16px;
+        text-decoration: none;
+        color: var(--app-secondary-color);
+        line-height: 40px;
+      }
+
+      .drawer-list a.iron-selected {
+        color: black;
+        font-weight: bold;
+      }
+
+      .drawer-content {
+        margin-top: 80px;
+      }
+
+      .mainMenu {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        align-items: left;
+        justify-content: left;
+      }
+
+      paper-tabs {
+        height: 100%;
+      }
+
+      paper-tab {
+        width: 100px;
+      }
+
+      paper-tab a {
+        text-decoration: none;
+        height:100%;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+      }
+
+      paper-tab.selected {
+        background-color: #5363BD;
+      }
+
+      #logo {
+        max-width: 150px;
+        max-height: 40px;
+      }
+
+      #main {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding-left: 10px;
+        padding-right: 95px;
+        background-color: #3a4ba7;
+        height: 100%;
+      }
+
+      .login {
+        color: white;
+        font-size: 12px;
+        min-width: 120px;
+      }
+
+      .dropdown iron-icon {
+        width: 20px;
+        height: 20px;
+      }
+
+      .small {
+        display: none;
+      }
+
+      .logout {
+        display: none;
+        position: absolute;
+        background-color: white;
+        color: #555555;
+        width: 100%;
+        font-size: 12px;
+        height: 30px;
+        border: 1px solid #cccccc;
+        border-radius: 4px; 
+        box-shadow: 0px 2px 6px #919191;
+      }
+
+      .dropdown {
+        position: relative;
+        display: inline-block;
+      }
+
+      .dropdown:hover {
+        cursor: pointer;
+      }
+
+      .dropdown:hover .logout {
+        display: flex;
+        padding: 16px 4px 0px 8px;
+      }
+
+      .logout iron-icon {
+        margin-right: 4px;
+        height: 16px;
+        width: 16px;
+      }
+
+      #sessionTimeout {
+        padding-bottom: 24px;
+      }
+
+      @media screen and (max-width: 770px) and (min-width: 600px) {
+          #main {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding-left: 10px;
+            padding-right: 50px;
+            background-color: #3a4ba7;
+            height: 100%;
+          }
+
+          .med {
+            display: none;
+          }
+
+          .login iron-icon {
+            width: 24px;
+            height: 24px;
+          }
+      }
+
+      @media screen and (max-width: 600px) {
+          .mainMenu {
+            display: none;
+          }
+
+          app-header {
+            background-color: #3a4ba7;
+          }
+
+          .login {
+            min-width: 50px;
+          }
+
+          .med {
+            display: none;
+          }
+
+          .small {
+            display: inline-flex;
+          }
+
+          .login iron-icon {
+            width: 24px;
+            height: 24px;
+          }
+      }
+    </style>
+
+    <app-location
+        route="{{route}}"
+        url-space-regex="^[[rootPath]]">
+    </app-location>
+
+    <app-route
+        route="{{route}}"
+        pattern="[[rootPath]]:page"
+        data="{{routeData}}"
+        tail="{{subroute}}">
+    </app-route>
+
+      <app-header-layout>
+
+        <app-header slot="header" fixed effects="waterfall">
+          <app-toolbar>
+          <paper-icon-button icon="my-icons:menu" drawer-toggle></paper-icon-button>
+          <div main-title>mySchedule</div>
+        </app-toolbar>
+        </app-header>
+
+        <app-drawer-layout id="drawerLayout">
+          <!-- Drawer content -->
+          <app-drawer id="drawer" slot="drawer">
+            <div class="drawer-content">
+              <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
+                <a name="view1" href="[[rootPath]]view1">View One</a>
+                <a name="view2" href="[[rootPath]]view2">View Two</a>
+                <a name="view3" href="[[rootPath]]view3">View Three</a>
+              </iron-selector>
+            </div>
+          </app-drawer>
+
+          <app-drawer id="rightDrawer" align="right">
+            <div class="drawer-content">
+              <app-toolbar>Menu</app-toolbar>
+              <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
+                <a name="view1" href="[[rootPath]]view1">View One</a>
+                <a name="view2" href="[[rootPath]]view2">View Two</a>
+                <a name="view3" href="[[rootPath]]view3">View Three</a>
+              </iron-selector>
+            </div>
+          </app-drawer>
+
+      <!-- Main content -->
+        <iron-pages
+            selected="[[page]]"
+            attr-for-selected="name"
+            fallback-selection="view404"
+            role="main">
+          <my-view1 name="view1"></my-view1>
+          <my-view2 name="view2"></my-view2>
+          <my-view3 name="view3"></my-view3>
+          <my-view404 name="view404"></my-view404>
+        </iron-pages>
+        
+      </app-drawer-layout>
+      </app-header-layout>
+  </template>
+
+  <script>
+    // Gesture events like tap and track generated from touch will not be
+    // preventable, allowing for better scrolling performance.
+    Polymer.setPassiveTouchGestures(true);
+
+    class MyApp extends Polymer.Element {
+      static get is() { return 'my-app'; }
+
+      static get properties() {
+        return {
+          page: {
+            type: String,
+            reflectToAttribute: true,
+            observer: '_pageChanged',
+          },
+          routeData: Object,
+          subroute: Object,
+          // This shouldn't be neccessary, but the Analyzer isn't picking up
+          // Polymer.Element#rootPath
+          rootPath: String,
+        };
+      }
+
+      static get observers() {
+        return [
+          '_routePageChanged(routeData.page)',
+        ];
+      }
+
+      _routePageChanged(page) {
+        // If no page was found in the route data, page will be an empty string.
+        // Default to 'view1' in that case.
+        this.page = page || 'view1';
+
+        // Close a non-persistent drawer when the page & route are changed.
+        if (!this.$.drawer.persistent) {
+          this.$.drawer.close();
+        }
+      }
+
+      _pageChanged(page) {
+        // Load page import on demand. Show 404 page if fails
+        const resolvedPageUrl = this.resolveUrl('my-' + page + '.html');
+        Polymer.importHref(
+            resolvedPageUrl,
+            null,
+            this._showPage404.bind(this),
+            true);
+      }
+
+      _showPage404() {
+        this.page = 'view404';
+      }
+    }
+
+    window.customElements.define(MyApp.is, MyApp);
+  </script>
+</dom-module>

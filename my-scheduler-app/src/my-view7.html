@@ -1,0 +1,136 @@
+
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="shared-styles.html">
+<link rel="import" href="my-view2.html">
+<link rel="import" href="my-view8.html">
+<link rel="import" href="my-view9.html">
+
+<dom-module id="my-view7">
+  <template>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+  <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+    <style include="shared-styles">
+      :host {
+        display: block;
+
+        padding: 10px;
+      }
+      button {
+        height: 45px;
+        border-radius: 6px;
+        border: none;
+        font-size: 16px;
+        margin-right: 8px;
+        color:white;
+        cursor: pointer;
+      }
+
+      .button-regular {
+        background-color: #3f51b5;
+        box-shadow: 0px 2px 6px #919191;
+      }
+
+      .button-special {
+        background-color: #ed3e4d;
+        box-shadow: 0px 2px 6px #919191;
+      }
+
+      .button-regular:hover {
+        background-color: #3a4ba7;
+      }
+
+      .button-special:hover {
+        background-color: #df3342;
+      }
+
+      .mdl-grid.main {
+        display: none;
+      }
+
+    </style>
+
+    <div class="card">
+      <div class="mdl-grid">
+        <div class="mdl-cell mdl-cell--12-col">
+          <h3>Scheduler</h3>
+        </div>
+        <div class="mdl-cell mdl-cell--12-col">
+          <button class="button-special" on-click="showScheduler">Scheduler</button>
+          <button class="button-regular" on-click="showMonth">Monthly View</button>
+          <button class="button-regular" on-click="showWeek">Weekly View</button>
+          <button class="button-regular" on-click="showDay">Day View</button>
+        </div>
+        <div class="mdl-cell mdl-cell--12-col">
+          <my-view8 id="scheduler" appointments="{{appointments}}"></my-view8>
+          <div class="mdl-grid main" id="monthView">
+            <my-view2 default-view="month" appointments="{{appointments}}"></my-view2>
+          </div>
+          <div class="mdl-grid main" id="weekView">
+            <my-view2 default-view="agendaWeek" appointments="{{appointments}}"></my-view2>
+          </div>
+          <div class="mdl-grid main" id="dayView">
+            <my-view2 default-view="agendaDay" appointments="{{appointments}}"></my-view2>
+          </div>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <script>
+    class MyView7 extends Polymer.Element {
+      static get is() { return 'my-view7'; }
+
+      _observeEventSource() {
+        console.log(this.eventSource);
+      }
+
+      static get properties() {
+        return {
+          appointments : {
+            type: Array,
+            value: [],
+            notify: true
+          }
+        }
+      }
+
+      showScheduler() {
+        this.$.scheduler.style.display = "block";
+        this.$.monthView.style.display = "none";
+        this.$.weekView.style.display = "none";
+        this.$.dayView.style.display = "none";
+      }
+     
+      showMonth() {
+        this.$.scheduler.style.display = "none";
+        this.$.monthView.style.display = "block";
+        this.$.weekView.style.display = "none";
+        this.$.dayView.style.display = "none";
+        var month = this.shadowRoot.querySelector("#monthView my-view2");
+        month.initialize();
+      }
+
+      showWeek() {
+        this.$.scheduler.style.display = "none";
+        this.$.monthView.style.display = "none";
+        this.$.weekView.style.display = "block";
+        this.$.dayView.style.display = "none";
+        var week = this.shadowRoot.querySelector("#weekView my-view2");
+        week.initialize();
+      }
+
+      showDay() {
+        this.$.scheduler.style.display = "none";
+        this.$.monthView.style.display = "none";
+        this.$.weekView.style.display = "none";
+        this.$.dayView.style.display = "block";
+        var day = this.shadowRoot.querySelector("#dayView my-view2");
+        day.initialize();
+      }
+
+    }
+
+    window.customElements.define(MyView7.is, MyView7);
+  </script>
+</dom-module>

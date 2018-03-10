@@ -1,0 +1,70 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="shared-styles.html">
+<link rel="import" href="../bower_components/the-grid/the-grid.html">
+
+<dom-module id="my-view3">
+  <template>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+    <style include="shared-styles">
+      :host {
+        display: block;
+
+        padding: 10px;
+      }
+      #grid5 tile {
+        background-color: tomato;
+      }
+
+      #grid5 [placeholder] {
+          background-color: lightgray;
+      }
+    </style>
+
+    <div class="card">
+      <div class="mdl-grid">
+        <div class="mdl-cell mdl-cell--1-col">
+          <div class="circle">3</div>
+        </div>
+        <div class="mdl-cell mdl-cell--11-col">
+          <h3>The Grid</h3>
+        </div>
+        <div class="mdl-cell mdl-cell--12-col">
+          <the-grid id="grid5" draggable resizable animated cell-height="80" cell-width="80" cell-margin="5" col-count="10" row-count="5">
+              <tile col="0" row="0" height="5" width="1">
+              </tile>
+              <tile col="3" row="3" height="1" width="1">
+                  <span resize="bottom-right" style="position: absolute; right: 4px; bottom: 4px;">┘</span>
+              </tile>
+              <tile col="5" row="1" height="2" width="2">
+                  <span resize="top-left" style="position:absolute; left: 4px; top: 4px;">┌</span>
+                  <span resize="top-right" style="position:absolute; right: 4px; top: 4px;">┐</span>
+                  <span resize="bottom-right" style="position: absolute; right: 4px; bottom: 4px;">┘</span>
+                  <span resize="bottom-left" style="position: absolute; left: 4px; bottom: 4px;">└</span>
+              </tile>
+              <div placeholder></div>
+          </the-grid>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <script>
+    class MyView3 extends Polymer.Element {
+      static get is() { return 'my-view3'; }
+    }
+
+    window.customElements.define(MyView3.is, MyView3);
+  </script>
+</dom-module>

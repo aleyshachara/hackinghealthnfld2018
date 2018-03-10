@@ -1,0 +1,241 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="shared-styles.html">
+<link rel="import" href="../bower_components/full-calendar-wrapper/full-calendar-wrapper.html">
+
+<dom-module id="my-view6">
+  <link rel="import" type="css" href="../bower_components/fullcalendar/dist/fullcalendar.min.css">
+  <link rel="import" type="css" href="../bower_components/fullcalendar-scheduler/dist/scheduler.min.css">
+  <template>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+  <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+
+    <style include="shared-styles">
+      :host {
+        display: block;
+
+        padding: 10px;
+      }
+      .fc-event {
+        background-color: lightblue;
+        text-align: center;
+        margin-bottom: 2px solid white;
+        cursor: move;
+      }
+    </style>
+
+    <div class="card">
+      <div class="mdl-grid">
+        <div class="mdl-cell mdl-cell--1-col">
+          <div class="circle">6</div>
+        </div>
+        <div class="mdl-cell mdl-cell--11-col">
+          <h3>Full Calendar with Scheduler</h3>
+        </div>
+        <button on-click="addEvent">Add</button>
+        <div class="mdl-cell mdl-cell--12-col">
+          <div id='calendar'></div>
+        </div>
+        <div class="mdl-cell mdl-cell--2-col">
+          <template is="dom-repeat" items="{{unscheduled}}" on-dom-change="makeDraggable">
+            <div><div class='fc-event' data-event='{{item}}' data-duration='01:00'>
+              [[item.title]]
+            </div></div>
+          </template>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <script>
+    class MyView6 extends Polymer.Element {
+      static get is() { return 'my-view6'; }
+
+      makeDraggable() {
+        var events = this.shadowRoot.querySelectorAll('.fc-event');
+        var jqueryEvents = [];
+        console.log(events);
+        for(var i=0; i<events.length; i++){
+          jqueryEvents[i] = jQuery(events[i]);
+          jqueryEvents[i].draggable({
+            revert: true,
+            revertDuration: 0,
+            zIndex: 999
+          });
+        }
+
+        var draggables = this.shadowRoot.querySelectorAll('.fc-slats tr');
+        var jqueryDrag = [];
+        for(var i=0; i<draggables.length; i++){
+          jqueryDrag[i] = jQuery(draggables[i]);
+          jqueryDrag[i].droppable({
+            drop: function( event, ui ) {
+              console.log(event.target.getAttribute('data-time'));
+            }
+          });
+        }
+
+      }
+
+      _dayClick() {
+        var newDate = moment(this.dayDate).toDate();
+        console.log(newDate);
+      }
+
+      _drop() {
+        console.log(moment(this.drop).toDate());
+      }
+
+      static get properties() {
+        return {
+          calendar : {
+            type: Object
+          },
+          dayDate: {
+            type: Object,
+            observer: "_dayClick"
+          },
+          drop: {
+            type: Object,
+            observer: "_drop"
+          },
+          dropEvent: {
+            type: Object
+          },
+          unscheduled: {
+            type: Array,
+            value: [
+              {
+                title: 'test event'
+              },
+              {
+                title: 'test event 2'
+              },
+              {
+                title: 'test event 3'
+              },
+              {
+                title: 'test event 4'
+              },
+              {
+                title: 'test event 5'
+              },
+              {
+                title: 'test event 6'
+              },
+              {
+                title: 'test event 7'
+              },
+              {
+                title: 'test event 8'
+              }
+            ]
+          },
+          appointments: {
+            type: Array,
+            value: [
+                {
+                  title: 'All Day Event',
+                  start: '2018-01-01'
+                },
+                {
+                  title: 'Long Event',
+                  start: '2018-01-07',
+                  end: '2018-01-10'
+                },
+                {
+                  id: 999,
+                  title: 'Repeating Event',
+                  start: '2018-01-09T16:00:00'
+                },
+                {
+                  id: 999,
+                  title: 'Repeating Event',
+                  start: '2018-01-16T16:00:00'
+                },
+                {
+                  title: 'Meeting',
+                  start: '2018-01-12T10:30:00',
+                  end: '2018-01-12T12:30:00'
+                },
+                {
+                  title: 'Lunch',
+                  start: '2018-01-12T12:00:00'
+                },
+                {
+                  title: 'Birthday Party',
+                  start: '2018-01-13T07:00:00'
+                },
+                {
+                  title: 'Click for Google',
+                  url: 'http://google.com/',
+                  start: '2018-01-28'
+                }
+              ]
+          }
+        }
+      }
+
+      test() {
+        console.log("HELLO");
+      }
+
+      ready() {
+        super.ready(); 
+        //this.addEventListener('drop', console.log("drop"));  
+        //this.addEventListener('event-drop', console.log("event drop")); 
+        //this.addEventListener('day-click', console.log("a day was clicked"));    
+        let calendar = this.$.calendar;
+        this.calendar = jQuery(calendar);
+
+        this.config = {
+          schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
+          header: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'agendaDay,agendaTwoDay,agendaWeek,month'
+          },
+          defaultView: 'agendaDay',
+          views: {
+          agendaTwoDay: {
+            type: 'agenda',
+              duration: { days: 2 },
+              groupByResource: true
+            }
+          },
+          resources: [
+            {id: '1', title: "Room 1"},
+            {id: '2', title: "Room 2"},
+            {id: '3', title: "Room 3"},
+            {id: '4', title: "Prep Recovery"}
+          ],
+          allDayText: "Doctor",
+          height: "auto",
+          minTime: "7:00",
+          maxTime: "15:00",
+          events: this.appointments,
+          lazyFetching: false,
+          weekends: false,
+          eventLimit: true,
+          editable: true,
+          droppable: true,
+          drop: function(date, jsEvent, ui, resourceId){
+            this.set('drop', date);
+            this.set('dropEvent', jsEvent);
+          }.bind(this),
+          eventDrop: function(event, delta, revertFunc, jsEvent, ui, view){
+            console.log("event dropppp");
+            this.dispatchEvent(new CustomEvent('event-drop', { detail: { event, delta, revertFunc, jsEvent, ui, view } }));
+          },
+          dayClick: function(date, jsEvent, view){
+            this.set('dayDate', date);
+          }.bind(this)
+        };
+        this.calendar.fullCalendar(this.config);
+      }
+    }
+    window.customElements.define(MyView6.is, MyView6);
+  </script>
+  
+</dom-module>
+

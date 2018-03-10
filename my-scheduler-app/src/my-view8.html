@@ -1,0 +1,453 @@
+
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../bower_components/moment/moment.js">
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="my-view8">
+  <template>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+  <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+    <style include="shared-styles">
+      :host {
+        display: block;
+
+        padding: 10px;
+      }
+      table {
+        width: 100%;
+      }
+
+      button {
+        height: 45px;
+        border-radius: 6px;
+        border: none;
+        font-size: 16px;
+        margin-right: 8px;
+        color:grey;
+        cursor: pointer;
+        border: 1px solid lightgrey;
+      }
+
+      button:hover {
+        border: 1px solid grey;
+      }
+
+      .bold {
+        font-size: 22px;
+        color: #555555;
+        line-height: 23px;
+      }
+
+      .draggable:hover{
+        cursor: move;
+      }
+
+      .cell {
+        height: 30px;
+        padding: 8px;
+        border-bottom: 1px solid #E8E8EE;
+      }
+      .time {
+        text-align: right;
+      }
+
+      .borderCol {
+        border-right: 1px solid #E8E8EE;
+        border-left: 1px solid #E8E8EE;
+      }
+
+      .standout {
+        font-size: 14px;
+        color: #555555;
+        font-weight: 600;
+      }
+
+      .scheduled {
+        background-color: #3f51b5;
+        font-size: 10px;
+        line-height: 18px;
+        color: white;
+      }
+      .dragTarget {
+        background-color: #E0F2FB;
+      }
+
+    </style>
+
+    <div class="mdl-grid">
+      <div class="mdl-cell mdl-cell--12-col bold">
+        <button on-click="goBackDay"><iron-icon icon="icons:chevron-left"></iron-icon></button>
+        [[currentDate]]
+        <button on-click="goForwardDay"><iron-icon icon="icons:chevron-right"></iron-icon></button>
+      </div>
+      <div class="mdl-cell mdl-cell--10-col">
+        <div class="mdl-grid mdl-grid--no-spacing" id="schedule">
+          <div class="mdl-cell mdl-cell--1-col"></div>
+          <div class="mdl-cell mdl-cell--2-col time">
+            <div class="cell standout"></div>
+            <div class="cell standout">Doctor</div>
+            <template is="dom-repeat" items="{{timeslots}}">
+              <div class="cell time standout"
+              on-drop="handleDropped" on-dragenter="handleDragEnter" on-dragleave="handleDragLeave"
+              on-dragover="handleDragOver" on-dragstart="handleDragStart">[[item.desc]]</div>
+            </template>            
+          </div>
+          <div class="mdl-cell mdl-cell--2-col room1 ">
+            <div class="cell borderCol standout">Room 1</div>
+            <div class="cell borderCol"></div>
+            <template is="dom-repeat" items="{{timeslots}}">
+              <div name$="[[item.code]]" class="cell borderCol" on-drop="handleDropped" on-dragenter="handleDragEnter" 
+              on-dragleave="handleDragLeave" on-dragover="handleDragOver" on-dragstart="handleDragStart"></div>
+            </template>
+          </div>
+          <div class="mdl-cell mdl-cell--2-col room2">
+            <div class="cell standout">Room 2</div>
+            <div class="cell"></div>
+            <template is="dom-repeat" items="{{timeslots}}">
+              <div name$="{{item.code}}" class="cell"
+              on-drop="handleDropped" on-dragenter="handleDragEnter" on-dragleave="handleDragLeave"
+              on-dragover="handleDragOver" on-dragstart="handleDragStart"></div>
+            </template>
+          </div>
+          <div class="mdl-cell mdl-cell--2-col room3 ">
+            <div class="cell borderCol standout">Room 3</div>
+            <div class="cell borderCol"></div>
+            <template is="dom-repeat" items="{{timeslots}}">
+              <div name$="{{item.code}}" class="cell borderCol"
+              on-drop="handleDropped" on-dragenter="handleDragEnter" on-dragleave="handleDragLeave"
+              on-dragover="handleDragOver" on-dragstart="handleDragStart"></div>
+            </template>
+          </div>
+          <div class="mdl-cell mdl-cell--2-col room4">
+            <div class="cell standout">Prep/Recovery</div>
+            <div class="cell"></div>
+            <template is="dom-repeat" items="{{timeslots}}">
+              <div name$="{{item.code}}" class="cell"
+              on-drop="handleDropped" on-dragenter="handleDragEnter" on-dragleave="handleDragLeave"
+              on-dragover="handleDragOver" on-dragstart="handleDragStart"></div>
+            </template>
+          </div>
+        </div>
+      </div>
+      <div class="mdl-cell mdl-cell--2-col">
+        <button class="button" style="margin-bottom: 8px;">Interventional Cardiology</button>
+        <button class="button" style="margin-bottom: 8px;">Electrophysiology</button>
+        <button class="button">Echocardiography</button>
+      </div>
+      <div class="mdl-cell mdl-cell--12-col">
+        <table class="mdl-data-table mdl-js-data-table">
+          <thead>
+            <tr>
+              <td class="mdl-data-table__cell--non-numeric">Referral Id</td>
+              <td class="mdl-data-table__cell--non-numeric">Region</td>
+              <td class="mdl-data-table__cell--non-numeric">Patient Name</td>
+              <td class="mdl-data-table__cell--non-numeric">Appointment Length (hrs)</td>
+            </tr>
+          </thead>
+          <tbody>
+            <template is="dom-repeat" items="[[referrals]]">
+              <tr class="draggable listed" draggable="true" draggable="true" on-dragstart="handleDragStart"
+                on-drop="handleDropped">
+                <td class="mdl-data-table__cell--non-numeric">[[item.referralIdentifier]]</td>
+                <td class="mdl-data-table__cell--non-numeric">[[item.region]]</td>
+                <td class="mdl-data-table__cell--non-numeric">
+                  [[item.lastName]], [[item.firstName]]
+                  <br>[[item.patientIdentifier]]
+                </td>
+                <td class="mdl-data-table__cell--non-numeric">[[item.length]]</td>
+              </tr>
+            </template>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <paper-dialog id="errorModal" style="padding: 16px;">
+      <div class="bold">Error</div>
+      <div>
+        <template is="dom-repeat" items="{{errors}}">
+          [[item]]<br>
+        </template>
+      </div>
+    </paper-dialog>
+  </template>
+
+  <script>
+    class MyView8 extends Polymer.Element {
+      static get is() { return 'my-view8'; }
+
+      handleDropped(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        
+        //get table cell and table row
+        var target = event.target;
+        var targetItem = event.model.item;
+        var parent = event.target.parentNode;
+
+        target.classList.remove("dragTarget")
+
+        //if the event dropped is from the referral list, call that handler
+        if(this.eventSource.classList.contains("listed")){
+          this.listAppointment(target, targetItem, parent);
+        }
+        else if(this.eventSource.classList.contains("scheduled")){
+          this.rescheduleAppointment(target, targetItem, parent);
+        }/*
+        else if(target.classList.contains("blank")){
+          this.scheduleBlankAppointment(target, parent);
+        }*/
+      }
+
+      rescheduleAppointment(target, targetItem, parent){
+        console.log(this.eventSource);
+        console.log(this.eventSourceItem);
+        if(!target.classList.contains("scheduled")){
+          var maxLength = this.getAvailableLength(target);
+          if(maxLength >= this.eventSourceItem.length){
+            target.innerHTML = this.eventSource.innerHTML;
+            target.classList.add("scheduled");
+            targetItem.length = eventSourceItem.length;
+
+            //this.createAppointment(target, parent);
+            target.draggable = true;
+            target.classList.add("draggable");
+
+            this.eventSource.innerHTML = "";
+            this.eventSource.classList.remove("scheduled");
+            this.eventSource.draggable = false;
+            this.eventSourceItem.length = 0;
+          }else{
+            this.errors = [];
+            this.push('errors', "This appointment is too long to fit in this time block.");
+            this.$.errorModal.open();
+          }
+        }else{
+          this.push('errors', "There is already an appointment scheduled in that room at that time.");
+          this.push('errors', "Please choose a different appointment time or a different room.");
+          this.$.errorModal.open();
+        }
+      }
+
+      listAppointment(target, targetItem, parent){
+        //block out time on scheduler UI
+        if(!target.classList.contains("scheduled")){
+          //get the maximum size of the appointment
+          var maxLength = this.getAvailableLength(target);
+          if(maxLength >= this.eventSourceItem.length){
+            target.innerHTML = this.eventSourceItem.lastName + ", " + this.eventSourceItem.firstName;
+            target.classList.add("scheduled");
+
+            targetItem.length = this.eventSourceItem.length;
+            //remove unscheduled referral from list
+            if(this.eventSource.classList.contains("listed"))
+              this.removeItemFromList();
+            this.createAppointment(target, parent);
+            target.draggable = true;
+
+          }else{
+            this.errors = [];
+            this.push('errors', "This appointment is too long to fit in this time block.");
+            this.$.errorModal.open();
+          }
+        }else{
+          //throw error
+          this.errors = [];
+          this.push('errors', "There is already an appointment scheduled in that room at that time.");
+          this.push('errors', "Please choose a different appointment time or a different room.");
+          this.$.errorModal.open();
+        }
+      }
+
+      createAppointment(target, parent){
+        //get start time and room
+        var startTime = target.getAttribute("name");
+        var startHours = startTime.slice(0,2);
+        var startMins = startTime.slice(3,5);
+        var room = this.getRoom(parent);
+        this.eventSourceItem.room = room;
+
+        //get event start time
+        var newTime = this.currentDateUnformatted.clone();
+        newTime.utc().set('hour', Number(startHours));
+        newTime.utc().set('minute', Number(startMins));
+        newTime.utc().set('seconds', 0);
+        var eventDateTime = newTime.toISOString();
+        var eventEndTime = newTime.add(this.eventSourceItem.length, "hours").toISOString();
+
+        //get patient name for appointment
+        var patientName = this.eventSourceItem.lastName + ", " + this.eventSourceItem.firstName;
+
+        //create new event 
+        var newEvent = {
+          title: patientName,
+          start: eventDateTime,
+          end: eventEndTime,
+          room: room
+        };
+
+        //add new event
+        this.push('appointments', newEvent);
+      }
+
+      getAvailableLength(target){
+        var curr = target;
+        var maxLength = 1;
+        var exit = false;
+        while((curr.getAttribute("name")!= "14:00") && (exit == false)){
+          if(!curr.nextElementSibling.classList.contains("scheduled"))
+            maxLength++;
+          else
+            exit = true;
+          curr = curr.nextElementSibling;
+        }
+        return maxLength;
+      }
+
+      getRoom(target){
+        if(target.classList.contains("room1"))
+          return "Room 1";
+        if(target.classList.contains("room2"))
+          return "Room 2";
+        if(target.classList.contains("room3"))
+          return "Room 3";
+        if(target.classList.contains("room4"))
+          return "Prep / Recovery";
+      }
+
+      removeItemFromList() {
+        var index = -1;
+        for(var i=0; i<this.referrals.length; i++){
+          if(this.referrals[i].referralIdentifier == this.eventSourceItem.referralIdentifier)
+            index = i;
+        }
+        if(index >= 0){
+          this.splice('referrals', index, 1);
+        }
+      }
+
+      handleDragEnter() {
+        if(!event.target.classList.contains("scheduled"))
+          event.target.classList.add("dragTarget");
+      }
+
+      handleDragLeave() {
+        event.target.classList.remove("dragTarget");
+      }
+
+      handleDragOver() {
+        event.preventDefault();
+        event.dataTransfer.dropEffect = "move";
+      }
+
+      handleDragStart(event) {
+        this.eventSource = event.target;
+        this.eventSourceItem = event.model.item;
+        event.dataTransfer.setData("text/plain", JSON.stringify(event.model.item));
+        var img = document.createElement("img");
+        img.src = "../images/cal.png";
+        event.dataTransfer.setDragImage(img, 0, 0);
+        event.dataTransfer.effectAllowed = "move";
+      }
+
+      goBackDay() {
+        var previousDay = this.currentDateUnformatted.subtract(1, "days");
+
+        while((previousDay.day()==0)||(previousDay.day()==6)){
+          previousDay = previousDay.subtract(1, "days");
+        }
+        this.set('currentDateUnformatted', previousDay);
+        var previousDayFormatted = previousDay.format("dddd - MMMM Do YYYY");
+        this.set('currentDate', previousDayFormatted);
+      }
+
+      goForwardDay() {
+        var nextDay = this.currentDateUnformatted.add(1, "days");
+
+        while((nextDay.day()==0)||(nextDay.day()==6)){
+          nextDay = nextDay.add(1, "days");
+        }
+        this.set('currentDateUnformatted', nextDay);
+        var nextDayFormatted = nextDay.format("dddd - MMMM Do YYYY");
+        this.set('currentDate', nextDayFormatted);
+      }
+
+      static get properties() {
+        return {
+          appointments : {
+            type: Array,
+            value: [],
+            notify: true
+          },
+          errors: {
+            type: Array,
+            value: []
+          },
+          currentDate: {
+            type: Object
+          },
+          currentDateUnformatted: {
+            type: Object
+          },
+          eventSource: {
+            notify: true
+          },
+          eventSourceItem: {
+            type: Object,
+            notify: true
+          },
+          timeslots: {
+            type: Array,
+            value: [
+              {"code": "07:00", "desc": "7:00am"},
+              {"code": "08:00", "desc": "8:00am"},
+              {"code": "09:00", "desc": "9:00am"},
+              {"code": "10:00", "desc": "10:00am"},
+              {"code": "11:00", "desc": "11:00am"},
+              {"code": "12:00", "desc": "12:00pm"},
+              {"code": "13:00", "desc": "1:00pm"},
+              {"code": "14:00", "desc": "2:00pm"}
+            ]
+          },
+          referrals : {
+            type: Array,
+            value: [{"referralIdentifier":"EH-2018-0006","region":"Eastern Health","site":null,"patientId":"5a57c6299beb7e5015f25741","patientIdentifier":"MCP 119631473715","patientType":null,"firstName":"MARIANO_TPCHI","lastName":"ANTHONY","status":"RefInProg","statusDate":"17-Jan-2018","referringPhysician":"Aleysha Mullen","urgencyRating":null,"timiRiskScore":null,"timiTimiMaxRecWaitTime":null,"timiStemiRiskScore":null,"timiStemiTimiMaxRecWaitTime":null,"oursUrgencyRatingScore":null,"oursMaxRecWaitTime":null,"overrideReqMaxWaitTime":null,"score":null,"maxRecWaitTime":null,"referralAcceptedDate":null,"maxRecWaitTimeDH":null,"percentageOverWaitTime":null,"reasonsForReferral":[],"proceduresRequested":[],"referralStatus":[], "length": 1},
+            {"referralIdentifier":"EH-2018-0011","region":"Eastern Health","site":null,"patientId":"5a5e39439beb7e0e8822e361","patientIdentifier":"eCID 1002705743","patientType":null,"firstName":"KINE","lastName":"DIOP","status":"RefInProg","statusDate":"21-Jan-2018","referringPhysician":"Aleysha Mullen","urgencyRating":null,"timiRiskScore":null,"timiTimiMaxRecWaitTime":null,"timiStemiRiskScore":null,"timiStemiTimiMaxRecWaitTime":null,"oursUrgencyRatingScore":null,"oursMaxRecWaitTime":null,"overrideReqMaxWaitTime":null,"score":null,"maxRecWaitTime":null,"referralAcceptedDate":null,"maxRecWaitTimeDH":null,"percentageOverWaitTime":null,"reasonsForReferral":[],"proceduresRequested":[],"referralStatus":[], "length": 1} ,
+            {"referralIdentifier":"CH-2018-0007","region":"Central Health","site":null,"patientId":"5a57c6299beb7e5015f25741","patientIdentifier":"MCP 119631473715","patientType":null,"firstName":"MARIANO_TPCHI","lastName":"ANTHONY","status":"RefInProg","statusDate":"17-Jan-2018","referringPhysician":"Aleysha Mullen","urgencyRating":null,"timiRiskScore":null,"timiTimiMaxRecWaitTime":null,"timiStemiRiskScore":null,"timiStemiTimiMaxRecWaitTime":null,"oursUrgencyRatingScore":null,"oursMaxRecWaitTime":null,"overrideReqMaxWaitTime":null,"score":null,"maxRecWaitTime":null,"referralAcceptedDate":null,"maxRecWaitTimeDH":null,"percentageOverWaitTime":null,"reasonsForReferral":[],"proceduresRequested":[],"referralStatus":[], "length": 2},
+            {"referralIdentifier":"OP-2018-0002","region":"Out of Province","site":null,"patientId":"5a57c6299beb7e5015f25741","patientIdentifier":"MCP 119631473715","patientType":null,"firstName":"MARIANO_TPCHI","lastName":"ANTHONY","status":"RefInProg","statusDate":"17-Jan-2018","referringPhysician":"Aleysha Mullen","urgencyRating":null,"timiRiskScore":null,"timiTimiMaxRecWaitTime":null,"timiStemiRiskScore":null,"timiStemiTimiMaxRecWaitTime":null,"oursUrgencyRatingScore":null,"oursMaxRecWaitTime":null,"overrideReqMaxWaitTime":null,"score":null,"maxRecWaitTime":null,"referralAcceptedDate":null,"maxRecWaitTimeDH":null,"percentageOverWaitTime":null,"reasonsForReferral":[],"proceduresRequested":[],"referralStatus":[], "length": 2},
+            {"referralIdentifier":"LG-2018-0006","region":"Labrador-Grenfell Health","site":null,"patientId":"5a57c6299beb7e5015f25741","patientIdentifier":"MCP 119631473715","patientType":"IN","firstName":"MARIANO_TPCHI","lastName":"ANTHONY","status":"RefInProg","statusDate":"19-Jan-2018","referringPhysician":"Aleysha Mullen","urgencyRating":null,"timiRiskScore":null,"timiTimiMaxRecWaitTime":null,"timiStemiRiskScore":null,"timiStemiTimiMaxRecWaitTime":null,"oursUrgencyRatingScore":null,"oursMaxRecWaitTime":null,"overrideReqMaxWaitTime":null,"score":null,"maxRecWaitTime":null,"referralAcceptedDate":null,"maxRecWaitTimeDH":null,"percentageOverWaitTime":null,"reasonsForReferral":[],"proceduresRequested":[],"referralStatus":[], "length": 1},
+            {"referralIdentifier":"EH-2018-0009","region":"Eastern Health","site":null,"patientId":"59ee460c546d21472f950119","patientIdentifier":"MCP 229550598788","patientType":null,"firstName":"KIRBY_TPCHI_XXXXXXXXX","lastName":"CAIN_XXXXXXXXXXXXXXXXXXX","status":"RefInProg","statusDate":"19-Jan-2018","referringPhysician":"Aleysha Mullen","urgencyRating":null,"timiRiskScore":null,"timiTimiMaxRecWaitTime":null,"timiStemiRiskScore":null,"timiStemiTimiMaxRecWaitTime":null,"oursUrgencyRatingScore":null,"oursMaxRecWaitTime":null,"overrideReqMaxWaitTime":null,"score":null,"maxRecWaitTime":null,"referralAcceptedDate":null,"maxRecWaitTimeDH":null,"percentageOverWaitTime":null,"reasonsForReferral":[],"proceduresRequested":[],"referralStatus":[], "length": 2},
+            {"referralIdentifier":"OC-2018-0004","region":"Out of Country","site":null,"patientId":"5a5e39439beb7e0e8822e361","patientIdentifier":"eCID 1002705743","patientType":"IN","firstName":"KINE","lastName":"DIOP","status":"RefInProg","statusDate":"19-Jan-2018","referringPhysician":"Aleysha Mullen","urgencyRating":null,"timiRiskScore":null,"timiTimiMaxRecWaitTime":null,"timiStemiRiskScore":null,"timiStemiTimiMaxRecWaitTime":null,"oursUrgencyRatingScore":null,"oursMaxRecWaitTime":null,"overrideReqMaxWaitTime":null,"score":null,"maxRecWaitTime":null,"referralAcceptedDate":null,"maxRecWaitTimeDH":null,"percentageOverWaitTime":null,"reasonsForReferral":[],"proceduresRequested":[],"referralStatus":[], "length": 1},
+            {"referralIdentifier":"OC-2018-0005","region":"Out of Country","site":null,"patientId":"5a5e39439beb7e0e8822e361","patientIdentifier":"eCID 1002705743","patientType":null,"firstName":"KINE","lastName":"DIOP","status":"RefInProg","statusDate":"21-Jan-2018","referringPhysician":"Aleysha Mullen","urgencyRating":null,"timiRiskScore":null,"timiTimiMaxRecWaitTime":null,"timiStemiRiskScore":null,"timiStemiTimiMaxRecWaitTime":null,"oursUrgencyRatingScore":null,"oursMaxRecWaitTime":null,"overrideReqMaxWaitTime":null,"score":null,"maxRecWaitTime":null,"referralAcceptedDate":null,"maxRecWaitTimeDH":null,"percentageOverWaitTime":null,"reasonsForReferral":[],"proceduresRequested":[],"referralStatus":[], "length": 3},
+            {"referralIdentifier":"WH-2018-0008","region":"Western Health","site":null,"patientId":"5a57c6299beb7e5015f25741","patientIdentifier":"MCP 119631473715","patientType":null,"firstName":"MARIANO_TPCHI","lastName":"ANTHONY","status":"RefInProg","statusDate":"21-Jan-2018","referringPhysician":"Aleysha Mullen","urgencyRating":null,"timiRiskScore":null,"timiTimiMaxRecWaitTime":null,"timiStemiRiskScore":null,"timiStemiTimiMaxRecWaitTime":null,"oursUrgencyRatingScore":null,"oursMaxRecWaitTime":null,"overrideReqMaxWaitTime":null,"score":null,"maxRecWaitTime":null,"referralAcceptedDate":null,"maxRecWaitTimeDH":null,"percentageOverWaitTime":null,"reasonsForReferral":[],"proceduresRequested":[],"referralStatus":[], "length": 1},
+            {"referralIdentifier":"LG-2018-0007","region":"Labrador-Grenfell Health","site":null,"patientId":"5a5e39439beb7e0e8822e361","patientIdentifier":"eCID 1002705743","patientType":null,"firstName":"KINE","lastName":"DIOP","status":"RefInProg","statusDate":"21-Jan-2018","referringPhysician":"Aleysha Mullen","urgencyRating":null,"timiRiskScore":null,"timiTimiMaxRecWaitTime":null,"timiStemiRiskScore":null,"timiStemiTimiMaxRecWaitTime":null,"oursUrgencyRatingScore":null,"oursMaxRecWaitTime":null,"overrideReqMaxWaitTime":null,"score":null,"maxRecWaitTime":null,"referralAcceptedDate":null,"maxRecWaitTimeDH":null,"percentageOverWaitTime":null,"reasonsForReferral":[],"proceduresRequested":[],"referralStatus":[], "length": 1},
+            {"referralIdentifier":"EH-2018-0008","region":"Eastern Health","site":null,"patientId":"5a57c6299beb7e5015f25741","patientIdentifier":"MCP 119631473715","patientType":null,"firstName":"MARIANO_TPCHI","lastName":"ANTHONY","status":"RefInProg","statusDate":"19-Jan-2018","referringPhysician":"Aleysha Mullen","urgencyRating":null,"timiRiskScore":null,"timiTimiMaxRecWaitTime":null,"timiStemiRiskScore":null,"timiStemiTimiMaxRecWaitTime":null,"oursUrgencyRatingScore":null,"oursMaxRecWaitTime":null,"overrideReqMaxWaitTime":null,"score":null,"maxRecWaitTime":null,"referralAcceptedDate":null,"maxRecWaitTimeDH":null,"percentageOverWaitTime":null,"reasonsForReferral":[],"proceduresRequested":[],"referralStatus":[], "length": 1},
+            {"referralIdentifier":"WH-2018-0007","region":"Western Health","site":null,"patientId":"5a57c6299beb7e5015f25741","patientIdentifier":"MCP 119631473715","patientType":null,"firstName":"MARIANO_TPCHI","lastName":"ANTHONY","status":"RefInProg","statusDate":"21-Jan-2018","referringPhysician":"Aleysha Mullen","urgencyRating":null,"timiRiskScore":null,"timiTimiMaxRecWaitTime":null,"timiStemiRiskScore":null,"timiStemiTimiMaxRecWaitTime":null,"oursUrgencyRatingScore":null,"oursMaxRecWaitTime":null,"overrideReqMaxWaitTime":null,"score":null,"maxRecWaitTime":null,"referralAcceptedDate":null,"maxRecWaitTimeDH":null,"percentageOverWaitTime":null,"reasonsForReferral":[],"proceduresRequested":[],"referralStatus":[], "length": 2},
+            {"referralIdentifier":"WH-2018-0006","region":"Western Health","site":null,"patientId":"5a57c6299beb7e5015f25741","patientIdentifier":"MCP 119631473715","patientType":null,"firstName":"MARIANO_TPCHI","lastName":"ANTHONY","status":"RefInProg","statusDate":"19-Jan-2018","referringPhysician":"Aleysha Mullen","urgencyRating":null,"timiRiskScore":null,"timiTimiMaxRecWaitTime":null,"timiStemiRiskScore":null,"timiStemiTimiMaxRecWaitTime":null,"oursUrgencyRatingScore":null,"oursMaxRecWaitTime":null,"overrideReqMaxWaitTime":null,"score":null,"maxRecWaitTime":null,"referralAcceptedDate":null,"maxRecWaitTimeDH":null,"percentageOverWaitTime":null,"reasonsForReferral":[],"proceduresRequested":[],"referralStatus":[], "length": 2},
+            {"referralIdentifier":"LG-2018-0005","region":"Labrador-Grenfell Health","site":null,"patientId":"5a57c6299beb7e5015f25741","patientIdentifier":"MCP 119631473715","patientType":null,"firstName":"MARIANO_TPCHI","lastName":"ANTHONY","status":"RefInProg","statusDate":"19-Jan-2018","referringPhysician":"Aleysha Mullen","urgencyRating":null,"timiRiskScore":null,"timiTimiMaxRecWaitTime":null,"timiStemiRiskScore":null,"timiStemiTimiMaxRecWaitTime":null,"oursUrgencyRatingScore":null,"oursMaxRecWaitTime":null,"overrideReqMaxWaitTime":null,"score":null,"maxRecWaitTime":null,"referralAcceptedDate":null,"maxRecWaitTimeDH":null,"percentageOverWaitTime":null,"reasonsForReferral":[],"proceduresRequested":[],"referralStatus":[], "length": 1},
+            {"referralIdentifier":"LG-2018-0004","region":"Labrador-Grenfell Health","site":null,"patientId":"5a57c6299beb7e5015f25741","patientIdentifier":"MCP 119631473715","patientType":null,"firstName":"MARIANO_TPCHI","lastName":"ANTHONY","status":"RefInProg","statusDate":"19-Jan-2018","referringPhysician":"Aleysha Mullen","urgencyRating":null,"timiRiskScore":null,"timiTimiMaxRecWaitTime":null,"timiStemiRiskScore":null,"timiStemiTimiMaxRecWaitTime":null,"oursUrgencyRatingScore":null,"oursMaxRecWaitTime":null,"overrideReqMaxWaitTime":null,"score":null,"maxRecWaitTime":null,"referralAcceptedDate":null,"maxRecWaitTimeDH":null,"percentageOverWaitTime":null,"reasonsForReferral":[],"proceduresRequested":[],"referralStatus":[], "length": 1},
+            {"referralIdentifier":"WH-2018-0005","region":"Western Health","site":null,"patientId":"5a5e39439beb7e0e8822e361","patientIdentifier":"eCID 1002705743","patientType":null,"firstName":"KINE","lastName":"DIOP","status":"RefInProg","statusDate":"19-Jan-2018","referringPhysician":"Aleysha Mullen","urgencyRating":null,"timiRiskScore":null,"timiTimiMaxRecWaitTime":null,"timiStemiRiskScore":null,"timiStemiTimiMaxRecWaitTime":null,"oursUrgencyRatingScore":null,"oursMaxRecWaitTime":null,"overrideReqMaxWaitTime":null,"score":null,"maxRecWaitTime":null,"referralAcceptedDate":null,"maxRecWaitTimeDH":null,"percentageOverWaitTime":null,"reasonsForReferral":[],"proceduresRequested":[],"referralStatus":[], "length": 2},
+            {"referralIdentifier":"OC-2018-0002","region":"Out of Country","site":"SPH","patientId":"59ee460c546d21472f950119","patientIdentifier":"MCP 229550598788","patientType":"IN","firstName":"KIRBY_TPCHI_XXXXXXXXX","lastName":"CAIN_XXXXXXXXXXXXXXXXXXX","status":"RefInProg","statusDate":"11-Jan-2018","referringPhysician":"Joanna Bloggs","urgencyRating":null,"timiRiskScore":7,"timiTimiMaxRecWaitTime":"48","timiStemiRiskScore":null,"timiStemiTimiMaxRecWaitTime":null,"oursUrgencyRatingScore":null,"oursMaxRecWaitTime":null,"overrideReqMaxWaitTime":null,"score":null,"maxRecWaitTime":null,"referralAcceptedDate":null,"maxRecWaitTimeDH":null,"percentageOverWaitTime":null,"reasonsForReferral":[{"reason":"NSTE","otherType":null,"otherDesc":null}],"proceduresRequested":[{"procedure":"TAVR","reason":"","otherDescription":""}],"referralStatus":[], "length": 1},
+            {"referralIdentifier":"EH-2018-0010","region":"Eastern Health","site":null,"patientId":"5a5e39439beb7e0e8822e361","patientIdentifier":"eCID 1002705743","patientType":"IN","firstName":"KINE","lastName":"DIOP","status":"RefInProg","statusDate":"19-Jan-2018","referringPhysician":"Aleysha Mullen","urgencyRating":null,"timiRiskScore":null,"timiTimiMaxRecWaitTime":null,"timiStemiRiskScore":null,"timiStemiTimiMaxRecWaitTime":null,"oursUrgencyRatingScore":null,"oursMaxRecWaitTime":null,"overrideReqMaxWaitTime":null,"score":null,"maxRecWaitTime":null,"referralAcceptedDate":null,"maxRecWaitTimeDH":null,"percentageOverWaitTime":null,"reasonsForReferral":[{"reason":"NSTE","otherType":null,"otherDesc":null}],"proceduresRequested":[],"referralStatus":[], "length": 1}]
+          }
+        }
+      }
+
+      ready() {
+        super.ready();
+        var todayUnformatted = moment();
+        while((todayUnformatted.day()==0)||(todayUnformatted.day()==6)){
+          todayUnformatted = todayUnformatted.subtract(1, "days");
+        }
+        this.set('currentDateUnformatted', todayUnformatted);
+        var todayFormatted = todayUnformatted.format("dddd - MMMM Do YYYY");
+        this.set('currentDate', todayFormatted);
+      }
+
+    }
+
+    window.customElements.define(MyView8.is, MyView8);
+  </script>
+</dom-module>

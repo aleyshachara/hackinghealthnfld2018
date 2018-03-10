@@ -1,0 +1,159 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+
+<dom-module id="shared-styles">
+  <template>
+    <style>
+      .card {
+        margin: 24px;
+        padding: 32px;
+        color: #757575;
+        background-color: #fff;
+      }
+
+      h1 {
+        font-family: 'source_sans_proregular', Arial, sans-serif;
+        color: #555555;
+        line-height: 38px;
+        font-size: 34px;
+      }
+
+      h2 {
+        font-family: 'source_sans_prosemibold', Arial, sans-serif;
+        font-size: 22px;
+        line-height: 23px;
+        color: #555555;
+      }
+
+      .body-copy {
+        font-family: 'source_sans_proregular', Arial, sans-serif;
+        font-size: 16px;
+        color: #555555;
+      }
+
+      .bold-body-copy {
+        font-family: 'source_sans_prosemibold', Arial, sans-serif;
+        font-size: 16px;
+        color: #555555;
+      }
+
+      .alert-copy {
+        font-family: 'source_sans_proregular', Arial, sans-serif;
+        font-size: 16px;
+        color: #ed3e4d;
+        line-height: 23px;
+      }
+
+      .small-copy {
+        font-family: 'source_sans_proregular', Arial, sans-serif
+        font-size: 10px;
+        color: #555555;
+        line-height: 18px;
+      }
+
+      button {
+        height: 45px;
+        border-radius: 6px;
+        border: none;
+        box-shadow: 0px 2px 6px #919191;
+        font-size: 16px;
+        line-height: 30px;
+        font-family: 'source_sans_proregular', Arial, sans-serif;
+        color: white;
+        padding: 10px;
+        min-width: 65px;
+      }
+
+      button.standard-button {
+        background-color: #3f51b5;
+      }
+
+      button.standard-button:hover {
+        background-color: #3a4ba7;
+        cursor: pointer;
+      }
+
+      button.alert-button {
+        background-color: #ed3e4d;
+      }
+
+      button.alert-button:hover {
+        background-color: #df3342;
+        cursor: pointer;
+      }
+
+      button.warning-button {
+        background-color: #F06E25;
+      }
+
+      button.warning-button:hover {
+        background-color: #EF6618;
+        cursor: pointer;
+      }
+
+      button.ghost-button {
+        border: 1px solid #cccccc;
+        box-shadow: 0px 0px 0px;
+        color: #555555;
+      }
+
+      button.ghost-button:hover {
+        border: 1px solid #555555;
+        cursor: pointer;
+      }
+
+      hr {
+        background-color: #F6F6F6;
+        height: 2px;
+        border:0;
+      }
+
+      @media screen and (max-width: 600px) {
+        div.card {
+          margin: 0;
+          padding: 16px;
+        }
+      }
+
+      .pop-up-header {
+        font-family: 'source_sans_prosemibold', Arial, sans-serif;
+        font-size: 16px;
+        margin-top: 0;
+        padding-top: 20px;
+        height: 35px;
+      }
+
+      .content-dialog {
+        color: #555555;
+        background-color: #F6f6f6;
+      }
+
+      .error-dialog {
+        color: white;
+        background-color: #ed3e4d;
+        text-align: center;
+      }
+
+      .warning-dialog {
+        color: white;
+        background-color: #F06E25;
+        text-align: center;
+      }
+
+      .confirmation-dialog {
+        color: #555555;
+        background-color: #F6f6f6;
+        text-align: center;
+      }
+
+      .pop-up-buttons {
+        text-align: right;
+        margin-bottom: 5px;
+      }
+
+      paper-dialog-scrollable {
+        margin-top: 0;
+      }
+
+    </style>
+  </template>
+</dom-module>
