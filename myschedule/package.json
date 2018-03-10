@@ -13,6 +13,7 @@
     "test:integration": "polymer build # test that psk builds without error with the CLI"
   },
   "dependencies": {
-    "fullcalendar": "^3.9.0"
+    "fullcalendar": "^3.9.0",
+    "material-design-lite": "^1.3.0"
   }
 }
