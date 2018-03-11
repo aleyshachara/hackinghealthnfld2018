@@ -19,6 +19,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/app-route/app-route.html">
 <link rel="import" href="../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="my-icons.html">
 
@@ -243,22 +244,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         <app-header slot="header" fixed effects="waterfall">
           <app-toolbar>
-          <paper-icon-button icon="my-icons:menu" drawer-toggle></paper-icon-button>
-          <div main-title>mySchedule</div>
+          <iron-icon icon="icons:event" style="margin-left: 30px; margin-right: 8px"></iron-icon>
+          <div main-title>myScheduler</div>
         </app-toolbar>
         </app-header>
 
         <app-drawer-layout id="drawerLayout">
           <!-- Drawer content -->
-          <app-drawer id="drawer" slot="drawer">
-            <div class="drawer-content">
-              <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-                <a name="view1" href="[[rootPath]]view1">View One</a>
-                <a name="view2" href="[[rootPath]]view2">View Two</a>
-                <a name="view3" href="[[rootPath]]view3">View Three</a>
-              </iron-selector>
-            </div>
-          </app-drawer>
+          
 
           <app-drawer id="rightDrawer" align="right">
             <div class="drawer-content">
@@ -324,10 +317,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         // Default to 'view1' in that case.
         this.page = page || 'view1';
 
-        // Close a non-persistent drawer when the page & route are changed.
-        if (!this.$.drawer.persistent) {
-          this.$.drawer.close();
-        }
       }
 
       _pageChanged(page) {

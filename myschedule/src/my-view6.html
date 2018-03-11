@@ -10,7 +10,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/scheduler-component/scheduler-component.html">
+<link rel="import" href="../bower_components/scheduler-component/category-element.html">
+<link rel="import" href="../bower_components/scheduler-component/categories-element.html">
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
 <link rel="import" href="shared-styles.html">
+<link rel="import" href="my-view2.html">
+<link rel="import" href="my-view5.html">
 
 <dom-module id="my-view6">
   <template>
@@ -20,27 +26,148 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         padding: 10px;
       }
+      .form {
+        display: flex;
+      }
+      my-view2 {
+        width: 40%;
+        margin-right: 20px;
+      }
+      my-view5 {
+        width: 50%;
+      }
+
+      paper-dialog {
+        max-height: 800px;
+        max-width: 800px;
+      }
+
+      scheduler-component {
+        max-height: 400px;
+        max-width: 600px;
+      }
     </style>
 
     <div class="card">
-      <h2>Scheduler</h2>
+      <h1>Scheduler - [[patient.lastName]], [[patient.firstName]]</h1>
+      <div class="form">
+        <my-view2 otherAppointments="{{otherAppointments}}" travelTime="{{travelTime}}" prepTime="{{prepTime}}"></my-view2>
+        <my-view5 rheumScore="{{rheumScore}}" id="view5"></my-view5>
+      </div>
+      <button class="standard-button" on-click="showCalendar">Schedule Patient</button>
       <div class="calendar">
-        <scheduler-component
-          default-view="month"
-          event-color="#8e44ad"
-          text-color="#ecf0f1"
-          events='[
-            {"title" : "event1","start" : "2018-03-06"},
-            {"title" : "event2","start" : "2018-03-12","end" : "2018-03-14"},
-            {"title" : "event3","start" : "2018-03-15T12:30:00","allDay" :false}]'>
-        </scheduler-component>
+        <paper-dialog id="lowRheum">
+          <scheduler-component
+            default-view="month"
+            event-color="#8e44ad"
+            text-color="#ecf0f1"
+            events='[
+              {"title" : "Recommended","start" : "2018-05-06", "category": "Recommended"},
+              {"title" : "Alternate","start" : "2018-05-06", "category": "Alternate"},
+              {"title" : "Alternate","start" : "2018-05-12", "category": "Alternate"},
+              {"title" : "Scheduled","start" : "2018-04-15T12:30:00","allDay" :false, "category": "Existing"}]'
+            categories='[{ "label": "Recommended", "color": "#85B454","hidden":false },
+                         { "label": "Alternate", "color": "#cccccc","hidden":false },
+                         { "label": "Existing", "color": "#4054B2","hidden":false }]'
+            default-date="2018-05-01" on-event-click="confirm">
+          </scheduler-component>
+        </paper-dialog>
+        <paper-dialog id="medRheum">
+          <scheduler-component
+            default-view="month"
+            event-color="#8e44ad"
+            text-color="#ecf0f1"
+            events='[
+              {"title" : "Recommended","start" : "2018-04-06", "category": "Recommended"},
+              {"title" : "Alternate","start" : "2018-04-06", "category": "Alternate"},
+              {"title" : "Alternate","start" : "2018-04-12", "category": "Alternate"},
+              {"title" : "Scheduled","start" : "2018-04-15T12:30:00","allDay" :false, "category": "Existing"}]'
+            categories='[{ "label": "Recommended", "color": "#85B454","hidden":false },
+                         { "label": "Alternate", "color": "#cccccc","hidden":false },
+                         { "label": "Existing", "color": "#4054B2","hidden":false }]'
+            default-date="2018-04-01" on-event-click="confirm">
+          </scheduler-component>
+        </paper-dialog>
+        <paper-dialog id="highRheum">
+          <scheduler-component
+            default-view="month"
+            event-color="#8e44ad"
+            text-color="#ecf0f1"
+            events='[
+              {"title" : "Recommended","start" : "2018-03-06", "category": "Recommended"},
+              {"title" : "Alternate","start" : "2018-03-06", "category": "Alternate"},
+              {"title" : "Alternate","start" : "2018-03-12", "category": "Alternate"},
+              {"title" : "Scheduled","start" : "2018-03-15T12:30:00","allDay" :false, "category": "Existing"}]'
+             categories='[{ "label": "Recommended", "color": "#85B454","hidden":false },
+                         { "label": "Alternate", "color": "#cccccc","hidden":false },
+                         { "label": "Existing", "color": "#4054B2","hidden":false }]'
+            default-date="2018-03-01" on-event-click="confirm">
+          </scheduler-component>
+        </paper-dialog>
+        <paper-dialog id="confirmationMessage">
+          <div class="confirmation-dialog pop-up-header">Appointment Scheduled</div>
+          <div>
+            Patient Scheduled for [[scheduledDate]] at [[scheduledTime]]
+          </div>
+        </paper-dialog>
       </div>
     </div>
   </template>
 
   <script>
     class MyView6 extends Polymer.Element {
-      static get is() { return 'my-view6'; }
+      static get is() { return 'my-view6';}
+
+      confirm(event) {
+        let date = moment(event.detail.calEvent.start)
+        this.set('scheduledDate', date.format("D-MMM-YYYY"));
+        this.set('scheduledTime', date.format("h:mm:A"));
+        this.$.lowRheum.close();
+        this.$.medRheum.close();
+        this.$.highRheum.close();
+        this.$.confirmationMessage.open();
+      }
+
+      showCalendar() {
+        if(this.$.view5.rheumScore === "low")
+          this.$.lowRheum.open();
+        else if(this.$.view5.rheumScore === "medium")
+          this.$.medRheum.open();
+        else if(this.$.view5.rheumScore === "high")
+          this.$.highRheum.open();
+        else
+          this.$.lowRheum.open();
+      }
+
+      static get properties() {
+        return {otherAppointments: {
+            type: String,
+            notify: true
+            },
+            travelTime: {
+              type: String,
+              notify: true
+            },
+            prepTime: {
+              type: String,
+              notify: true
+            },
+            rheumScore: {
+              type: String,
+              notify: true
+            },
+            scheduledDate: {
+              type: String
+            },
+            scheduledTime: {
+              type: String
+            },
+            patient: {
+            type: Object,
+            value: {"firstName":"MARIANO_TPCHI","middleName":"","lastName":"ANTHONY","dateOfBirth":"26-May-1963","gender":"M","source":"","addressLine1":"235 BYRD AVE","addressLine2":"","municipality":"OPEN HALL","provinceState":"NL","postalZipCode":"A0C 2B0","country":"CA","addressType":"","phoneNumber":"709 876 5696","dateOfExpiry":"","patientIdentifiers":[{"clientIdentifier":"1002726876","clientIdentifierType":"eCID"},{"clientIdentifier":"119631473715","clientIdentifierType":"MCP", "phoneNumber": "1-506-234-5678", "emailAddress": "anthony@email.com"}]}
+          }
+        }
+      }
     }
 
     window.customElements.define(MyView6.is, MyView6);

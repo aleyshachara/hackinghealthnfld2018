@@ -1,4 +1,6 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="my-view4">
@@ -56,7 +58,6 @@
           height: 1px;
           border: 0;
         }
-
         }
 
         @media screen and (max-width: 550px) {
@@ -154,12 +155,31 @@
           </div>
         </div> 
       </div>
+
+      <div>
+        <h3> Joint Diagram </h3>
+        <img src="../images/PatientInfo.png" width="250" height="300">
+      </div>
+
+      <h3>Symptoms</h3>
+      <paper-checkbox checked disabled>Acne</paper-checkbox>
+      <paper-checkbox checked disabled>Stomach Pain</paper-checkbox>
+      <paper-checkbox checked disabled>Low grade fever</paper-checkbox>
+
+      <div align="right">
+        <button class="standard-button" style="margin-top: 16px; margin-left: 20px" on-click="goToSchedule">Schedule Patient</button>
+      </div>
     </div>
   </template>
 
   <script>
     class MyView4 extends Polymer.Element {
       static get is() { return 'my-view4'; }
+
+      goToSchedule() {
+        var newUrl = "view6";
+        window.location.href = newUrl;
+      }
 
       static get properties() {
         return {
