@@ -5,6 +5,8 @@
 
 <dom-module id="my-view4">
   <template>
+    <link rel="stylesheet" href="../node_modules/material-design-lite/material.min.css">
+    <script src="../node_modules/material-design-lite/material.min.js"></script>
     <style include="shared-styles">
       :host {
         display: block;
@@ -85,7 +87,9 @@
     </style>
 
     <div class="card">
-      <h2>Patient Demographics - [[patient.lastName]], [[patient.firstName]]</h2>
+      <h1>[[patient.lastName]], [[patient.firstName]]</h1>
+      <hr>
+      <h2>Patient Demographics</h2>
       <div class="section">
         <div class="col left-col">
           <div class="row flex-row b-row">
@@ -155,16 +159,78 @@
           </div>
         </div> 
       </div>
-
-      <div>
-        <h3> Joint Diagram </h3>
-        <img src="../images/PatientInfo.png" width="250" height="300">
-      </div>
-
-      <h3>Symptoms</h3>
-      <paper-checkbox checked disabled>Acne</paper-checkbox>
-      <paper-checkbox checked disabled>Stomach Pain</paper-checkbox>
-      <paper-checkbox checked disabled>Low grade fever</paper-checkbox>
+      <hr>
+      <h2>Referrals</h2>
+      <table class="mdl-data-table mdl-js-data-table" id="patientReferrals">
+          <thead >
+            <tr >
+              <th name="referralIdentifier" class="mdl-data-table__cell--non-numeric">
+                Procedure ID
+              </th>
+              <th on-click="triggerSort" name="referralDate" class="mdl-data-table__cell--non-numeric">
+                Referral Date
+              </th>
+              <th on-click="triggerSort" name="patientType" class="mdl-data-table__cell--non-numeric">
+                Patient Type
+              </th>
+              <th on-click="triggerSort" name="reason" class="mdl-data-table__cell--non-numeric">
+                Reason For Referral
+              </th>
+              <th on-click="triggerSort" name="procedure" class="mdl-data-table__cell--non-numeric">
+                Procedure Requested
+              </th>
+              <th on-click="triggerSort" name="score" class="mdl-data-table__cell--non-numeric">
+                Score
+              </th>
+              <th on-click="triggerSort" name="status" class="mdl-data-table__cell--non-numeric">
+                Status
+              </th>
+              <th on-click="triggerSort" name="statusDate" class="mdl-data-table__cell--non-numeric">
+                Status Date
+              </th>
+              <th on-click="triggerSort" name="updatedDate" class="mdl-data-table__cell--non-numeric">
+                Updated Date
+              </th>
+              <th on-click="triggerSort" name="updatedBy" class="mdl-data-table__cell--non-numeric">
+                Updated By
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+              <tr id="{{referral.referralIdentifier}}">
+                <td class="mdl-data-table__cell--non-numeric" >
+                    {{referral.referralIdentifier}}
+                </td>
+                <td class="mdl-data-table__cell--non-numeric">{{referral.createdDate}}</td>
+                <td class="mdl-data-table__cell--non-numeric">
+                  Inpatient
+                </td>
+                <td class="mdl-data-table__cell--non-numeric">
+                  Unstable Angina
+                </td>
+                <td class="mdl-data-table__cell--non-numeric">
+                  Cardiac Cath Left
+                </td>
+                <td class="mdl-data-table__cell--non-numeric">
+                <template is="dom-if" if="{{referral.timiRiskScore}}">
+                  {{referral.timiRiskScore}} (TIMI)
+                </template>
+                <template is="dom-if" if="{{referral.timiStemiRiskScore}}">
+                  {{referral.timiStemiRiskScore}} (TIMI-STEMI)
+                </template>
+                <template is="dom-if" if="{{referral.oursUrgencyRatingScore}}">
+                  {{referral.oursUrgencyRatingScore}} (OURS)
+                </template>
+                </td>
+                <td class="mdl-data-table__cell--non-numeric">
+                  Referral Accepted
+                </td>
+                <td class="mdl-data-table__cell--non-numeric">{{referral.currentReferralStatusDate}}</td>
+                <td class="mdl-data-table__cell--non-numeric">{{referral.lastModifiedDate}}</td>
+                <td class="mdl-data-table__cell--non-numeric">{{referral.lastModifiedBy}}</td>
+              </tr>
+          </tbody>
+        </table>
 
       <div align="right">
         <button class="standard-button" style="margin-top: 16px; margin-left: 20px" on-click="goToSchedule">Schedule Patient</button>
@@ -186,6 +252,10 @@
           patient: {
             type: Object,
             value: {"firstName":"MARIANO_TPCHI","middleName":"","lastName":"ANTHONY","dateOfBirth":"26-May-1963","gender":"M","source":"","addressLine1":"235 BYRD AVE","addressLine2":"","municipality":"OPEN HALL","provinceState":"NL","postalZipCode":"A0C 2B0","country":"CA","addressType":"","phoneNumber":"709 876 5696","dateOfExpiry":"","patientIdentifiers":[{"clientIdentifier":"1002726876","clientIdentifierType":"eCID"},{"clientIdentifier":"119631473715","clientIdentifierType":"MCP", "phoneNumber": "1-506-234-5678", "emailAddress": "anthony@email.com"}]}
+          },
+          referral: {
+            type: Object,
+            value: {"id":"5a8dae1d060e73092fea5ad9","referralIdentifier":"CH-2018-0022","patientId":"5a620386060e73100ea7e5a2","procedureType":"IC","region":{"code":"OP","desc":"Out of Province"},"patientType":"IN","site":"CBCN","patientLocation":"aaa","familyPhysician":"aa","height":"213","weight":"275","medHypoglycemics":true,"medHypoglycemicsDesc":"3","medThrombolytics":true,"medThrombolyticsDate":"22-Jan-2018","medThrombolyticsTime":"1111","medAnticoagulants":true,"medAnticoagulantsDesc":"1","medAntiplatelets":false,"medAntiplateletsDesc":null,"medAsa":false,"medAsaReason":"12121","cmaPreviousMi":true,"cmaPreviousMiDate":"L2W","cmaPreviousMiAsOfDate":"21-Feb-2018","cmaCopd":true,"cmaDialysis":true,"cmaRecentGfrAvailable":false,"cmaGfr":null,"cmaGfrAsOfDate":null,"cmaGfrCreatinine":null,"cmaDiabetes":false,"cmaCvaTia":false,"cmaCvaTiaDate":null,"cmaCvaTiaAsOfDate":null,"cmaHypertension":false,"cmaHyperlipidemia":false,"cmaPvd":true,"cmaPvdDetails":"sss","cmaChf":true,"cmaEf":null,"cmaNyha":"1","cmaSmoking":"2","cmaHemoglobin":true,"cmaHemoglobinAsOfDate":"22-Jan-2018","cmaHemoglobinValue":121,"urgencyRating":"TIMI","timiQuestion1Response":1,"timiQuestion2Response":1,"timiQuestion3Response":1,"timiQuestion4Response":1,"timiQuestion5Response":1,"timiQuestion6Response":1,"timiQuestion7Response":1,"timiRiskScore":7,"timiTimiMaxRecWaitTime":"48","timiQuestion8Response":null,"timiQuestion9Response":null,"timiQuestion10Response":null,"timiQuestion11Response":null,"timiQuestion12Response":null,"timiQuestion13Response":null,"timiQuestion14Response":null,"timiQuestion15Response":null,"timiQuestion16Response":null,"timiStemiRiskScore":null,"timiStemiTimiMaxRecWaitTime":null,"oursCcsSymptomClass":null,"oursExerciseEcg":null,"oursFunctionalImaging":null,"oursHistoryOfMi":null,"oursUrgencyRating":null,"oursUrgencyRatingScore":null,"oursMaxRecWaitTime":null,"referralComment":null,"supportingDocumentationStatus":"Sep","referringPhysicianUserId":"joe.internist-ch","overrideRiskLevel":null,"overrideReqMaxWaitTime":null,"enteredInApproachUserId":null,"enteredInApproachDate":null,"procedureDate":null,"procedureTimeText":null,"procedureRoom":null,"pacDate":null,"pacTimeText":null,"pacInfoSentByUserId":null,"pacInfoSentDate":null,"pacEnteredInMeditechUserId":null,"pacEnteredInMeditechDate":null,"pacEnteredInApproachUserId":null,"pacEnteredInApproachDate":null,"procedureCancelledInMeditechUserId":null,"procedureCancelledInMeditechDate":null,"procedureCancelledInApproachUserId":null,"procedureCancelledInApproachDate":null,"createdDate":"22-Jan-2018","createdBy":"chco","lastModifiedDate":"21-Feb-2018","lastModifiedBy":"ae-coord","currentReferralStatus":"RefSub","currentReferralStatusDate":"22-Jan-2018","medAnticoagulantsIndi":["ACorS","PEDVT","MechV","UnOth","AtrFib"],"referralStatus":[{"status":"RefSub","reason":"","statusDate":"22-Jan-2018","changedBy":"chris h coordinator","id":null},{"status":"RefInProg","reason":null,"statusDate":"22-Jan-2018","changedBy":"chris h coordinator","id":null}],"supportingDocumentation":[],"reasonsForReferral":[{"reason":"UNA","otherType":null,"otherDesc":null},{"reason":"OTH","otherType":"VHD","otherDesc":null}],"proceduresRequested":[{"procedure":"CCL","reason":"","otherDescription":""},{"procedure":"procedures","reason":"","otherDescription":""}]}
           }
         }
       }

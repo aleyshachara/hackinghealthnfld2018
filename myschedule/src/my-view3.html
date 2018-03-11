@@ -9,6 +9,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/scheduler-component/scheduler-component.html">
+<link rel="import" href="../bower_components/scheduler-component/categories-element.html">
+<link rel="import" href="../bower_components/scheduler-component/category-element.html">
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="my-view3">
@@ -19,19 +22,73 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         padding: 10px;
       }
+      #calendar2 {
+        display: none;
+      }
     </style>
 
     <div class="card">
-      <div class="circle">3</div>
-      <h1>View Three</h1>
-      <p>Modus commodo minimum eum te, vero utinam assueverit per eu.</p>
-      <p>Ea duis bonorum nec, falli paulo aliquid ei eum.Has at minim mucius aliquam, est id tempor laoreet.Pro saepe pertinax ei, ad pri animal labores suscipiantur.</p>
+      <h2>Cath Lab Schedule</h2>
+        <div id="calendar1">
+          <scheduler-component
+            default-view="agendaWeek"
+            height="500"
+            hidden-days='[0,6]'
+            min-time="07:00",
+            max-time="15:00"
+            business-hours='{
+              "start": "07:00",
+              "end": "15:00"
+              }'
+            events='[
+              {"title" : "MARIANO_TPCH ANTHONY","start" : "2018-03-13T10:00:00", "category": "Recommended"},
+              {"title" : "VESTA_TPCH BROOKS","start" : "2018-03-13T13:00:00", "category": "Alternate"},
+              {"title" : "PEG WINNY","start" : "2018-03-14T14:00:00", "category": "Alternate"},
+              {"title" : "PARIS FRANCE","start" : "2018-03-12T12:30:00","allDay" :false, "category": "Existing"},
+              {"title" : "FLO RIDA","start" : "2018-03-16T08:30:00","allDay" :false, "category": "Existing"},
+              {"title" : "KIRBY_TPCHI CAIN","start" : "2018-03-16T10:00:00","allDay" :false, "category": "Existing"},
+              {"title" : "KENNA_TPCHI NOVAK","start" : "2018-03-15T08:30:00","allDay" :false, "category": "Existing"},
+              {"title" : "IRWIN_TPCHI GOMEZ","start" : "2018-03-15T14:00:00","allDay" :false, "category": "Existing"},
+              {"title" : "QUINN_TPCHI MARTINEZ","start" : "2018-03-13T08:00:00","allDay" :false, "category": "Existing"},
+              {"title" : "KENNY_TPCHI PETTY","start" : "2018-03-14T08:00:00","allDay" :false, "category": "Existing"},
+              {"title" : "KIMMIE TAPE","start" : "2018-03-16T12:30:00","allDay" :false, "category": "Existing"},
+              {"title" : "CONRAD_TPCHI PRUITT","start" : "2018-03-16T14:30:00","allDay" :false, "category": "Existing"},
+              {"title" : "KINE DIOP","start" : "2018-03-16T15:30:00","allDay" :false, "category": "Existing"},
+              {"title" : "EDYTH_TPCHI FROST","start" : "2018-03-12T10:30:00","allDay" :false, "category": "Existing"},
+              {"title" : "KIRBY_TPCHI LLYOD","start" : "2018-03-14T09:30:00","allDay" :false, "category": "Existing"}
+              ]'
+            categories='[
+              { "label": "Recommended", "color": "#85B454","hidden":false },
+              { "label": "Alternate", "color": "#cccccc","hidden":false },
+              { "label": "Existing", "color": "#4054B2","hidden":false }
+              ]'
+          >
+          </scheduler-component>
+        </div>
+        <div id="calendar2">
+          <scheduler-component
+            default-view="agendaWeek"
+            height="500"
+            hidden-days='[0,6]'
+            min-time="07:00",
+            max-time="15:00"
+          >
+          </scheduler-component>
+        </div>
     </div>
   </template>
 
   <script>
     class MyView3 extends Polymer.Element {
       static get is() { return 'my-view3'; }
+      static get properties() {
+        return {
+          dumb: {
+            type: Boolean, 
+            value: true
+          }
+        }
+      }
     }
 
     window.customElements.define(MyView3.is, MyView3);

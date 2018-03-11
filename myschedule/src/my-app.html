@@ -15,6 +15,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html">
 <link rel="import" href="../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
 <link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
 <link rel="import" href="../bower_components/app-route/app-location.html">
 <link rel="import" href="../bower_components/app-route/app-route.html">
 <link rel="import" href="../bower_components/iron-pages/iron-pages.html">
@@ -35,7 +37,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <template>
     <style>
       :host {
-        --app-primary-color: #3f51b5;
+        --app-primary-color: #3a4ba7;
         --app-secondary-color: black;
         display: block;
       }
@@ -95,7 +97,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       paper-tab {
-        width: 100px;
+        width: 120px;
       }
 
       paper-tab a {
@@ -179,6 +181,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         padding-bottom: 24px;
       }
 
+      .mainMenu {
+        margin-left: 24px;
+      }
+
+      #mainLink {
+        text-decoration: none;
+        color: white;
+      }
+
       @media screen and (max-width: 770px) and (min-width: 600px) {
           #main {
             display: flex;
@@ -245,8 +256,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <app-header slot="header" fixed effects="waterfall">
           <app-toolbar>
           <iron-icon icon="icons:event" style="margin-left: 30px; margin-right: 8px"></iron-icon>
-          <div main-title>myScheduler</div>
+          <a href="[[rootPath]]view1" id="mainLink">
+            <div main-title>
+              myIntelliScheduler
+            </div>
+          </a>
+          <div class="mainMenu">
+              <paper-tabs selected="[[page]]" attr-for-selected="name">
+                  <paper-tab id="referralFilterTab" class$="[[selectedPage]]">
+                    <a name="referral-filter" href="[[rootPath]]view3">Cath Lab Schedule</a>
+                  </paper-tab>
+              </paper-tabs>
+          </div>
         </app-toolbar>
+
         </app-header>
 
         <app-drawer-layout id="drawerLayout">
@@ -290,6 +313,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     class MyApp extends Polymer.Element {
       static get is() { return 'my-app'; }
+
+      goToHome() {
+        this.set('page', 'view1');
+      }
 
       static get properties() {
         return {
