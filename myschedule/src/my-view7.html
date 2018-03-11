@@ -1,0 +1,141 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/scheduler-component/scheduler-component.html">
+<link rel="import" href="../bower_components/scheduler-component/categories-element.html">
+<link rel="import" href="../bower_components/scheduler-component/category-element.html">
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="my-view7">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+
+        padding: 10px;
+      }
+      #calendar2 {
+        display: none;
+      }
+    </style>
+
+    <div class="card">
+      <h2>Cath Lab Schedule</h2>
+        <div id="calendar1">
+          <scheduler-component
+            default-view="agendaWeek"
+            height="500"
+            hidden-days='[0,6]'
+            min-time="07:00",
+            max-time="15:00"
+            business-hours='{
+              "start": "07:00",
+              "end": "15:00"
+              }'
+            events='[
+              {"title" : "MARIANO_TPCH ANTHONY","start" : "2018-03-13T10:00:00", "category": "Recommended"},
+              {"title" : "VESTA_TPCH BROOKS","start" : "2018-03-13T13:00:00", "category": "Alternate"},
+              {"title" : "PEG WINNY","start" : "2018-03-14T14:00:00", "category": "Alternate"},
+              {"title" : "PARIS FRANCE","start" : "2018-03-12T12:30:00","allDay" :false, "category": "Existing"},
+              {"title" : "FLO RIDA","start" : "2018-03-16T08:30:00","allDay" :false, "category": "Existing"},
+              {"title" : "KIRBY_TPCHI CAIN","start" : "2018-03-16T10:00:00","allDay" :false, "category": "Existing"},
+              {"title" : "KENNA_TPCHI NOVAK","start" : "2018-03-15T08:30:00","allDay" :false, "category": "Existing"},
+              {"title" : "IRWIN_TPCHI GOMEZ","start" : "2018-03-15T14:00:00","allDay" :false, "category": "Existing"},
+              {"title" : "QUINN_TPCHI MARTINEZ","start" : "2018-03-13T08:00:00","allDay" :false, "category": "Existing"},
+              {"title" : "KENNY_TPCHI PETTY","start" : "2018-03-14T08:00:00","allDay" :false, "category": "Existing"},
+              {"title" : "KIMMIE TAPE","start" : "2018-03-16T12:30:00","allDay" :false, "category": "Existing"},
+              {"title" : "CONRAD_TPCHI PRUITT","start" : "2018-03-16T14:30:00","allDay" :false, "category": "Existing"},
+              {"title" : "KINE DIOP","start" : "2018-03-16T15:30:00","allDay" :false, "category": "Existing"},
+              {"title" : "EDYTH_TPCHI FROST","start" : "2018-03-12T10:30:00","allDay" :false, "category": "Existing"},
+              {"title" : "KIRBY_TPCHI LLYOD","start" : "2018-03-14T09:30:00","allDay" :false, "category": "Existing"},
+              {"title" : "MARIANO_TPCH ANTHONY","start" : "2018-03-19T10:00:00", "category": "Recommended"},
+              {"title" : "VESTA_TPCH BROOKS","start" : "2018-03-19T13:00:00", "category": "Alternate"},
+              {"title" : "PEG WINNY","start" : "2018-03-20T14:00:00", "category": "Alternate"},
+              {"title" : "PARIS FRANCE","start" : "2018-03-20T08:30:00","allDay" :false, "category": "Existing"},
+              {"title" : "FLO RIDA","start" : "2018-03-20T15:30:00","allDay" :false, "category": "Existing"},
+              {"title" : "KIRBY_TPCHI CAIN","start" : "2018-03-20T10:00:00","allDay" :false, "category": "Existing"},
+              {"title" : "KENNA_TPCHI NOVAK","start" : "2018-03-20T11:30:00","allDay" :false, "category": "Existing"},
+              {"title" : "IRWIN_TPCHI GOMEZ","start" : "2018-03-21T08:00:00","allDay" :false, "category": "Existing"},
+              {"title" : "QUINN_TPCHI MARTINEZ","start" : "2018-03-21T10:00:00","allDay" :false, "category": "Existing"},
+              {"title" : "KENNY_TPCHI PETTY","start" : "2018-03-21T13:00:00","allDay" :false, "category": "Existing"},
+              {"title" : "KIMMIE TAPE","start" : "2018-03-21T14:00:00","allDay" :false, "category": "Existing"},
+              {"title" : "CONRAD_TPCHI PRUITT","start" : "2018-03-21T15:00:00","allDay" :false, "category": "Existing"},
+              {"title" : "KINE DIOP","start" : "2018-03-22T08:30:00","allDay" :false, "category": "Existing"},
+              {"title" : "EDYTH_TPCHI FROST","start" : "2018-03-22T10:30:00","allDay" :false, "category": "Existing"},
+              {"title" : "KIRBY_TPCHI LLYOD","start" : "2018-03-22T11:30:00","allDay" :false, "category": "Existing"},
+              {"title" : "MARIANO_TPCH ANTHONY","start" : "2018-03-23T08:00:00", "category": "Recommended"},
+              {"title" : "VESTA_TPCH BROOKS","start" : "2018-03-23T10:00:00", "category": "Alternate"},
+              {"title" : "PEG WINNY","start" : "2018-03-23T13:00:00", "category": "Alternate"},
+              {"title" : "PARIS FRANCE","start" : "2018-03-23T14:30:00","allDay" :false, "category": "Existing"},
+              {"title" : "FLO RIDA","start" : "2018-03-23T15:30:00","allDay" :false, "category": "Existing"},
+              {"title" : "KIRBY_TPCHI CAIN","start" : "2018-03-26T08:00:00","allDay" :false, "category": "Existing"},
+              {"title" : "KENNA_TPCHI NOVAK","start" : "2018-03-26T10:30:00","allDay" :false, "category": "Existing"},
+              {"title" : "IRWIN_TPCHI GOMEZ","start" : "2018-03-26T11:30:00","allDay" :false, "category": "Existing"},
+              {"title" : "QUINN_TPCHI MARTINEZ","start" : "2018-03-26T13:00:00","allDay" :false, "category": "Existing"},
+              {"title" : "KENNY_TPCHI PETTY","start" : "2018-03-26T15:00:00","allDay" :false, "category": "Existing"},
+              {"title" : "KIMMIE TAPE","start" : "2018-03-27T08:00:00","allDay" :false, "category": "Existing"},
+              {"title" : "CONRAD_TPCHI PRUITT","start" : "2018-03-27T10:00:00","allDay" :false, "category": "Existing"},
+              {"title" : "KINE DIOP","start" : "2018-03-27T13:00:00","allDay" :false, "category": "Existing"},
+              {"title" : "EDYTH_TPCHI FROST","start" : "2018-03-27T14:30:00","allDay" :false, "category": "Existing"},
+              {"title" : "KIRBY_TPCHI LLYOD","start" : "2018-03-27T15:00:00","allDay" :false, "category": "Existing"},
+              {"title" : "MARIANO_TPCH ANTHONY","start" : "2018-03-28T08:00:00", "category": "Recommended"},
+              {"title" : "VESTA_TPCH BROOKS","start" : "2018-03-28T10:00:00", "category": "Alternate"},
+              {"title" : "PEG WINNY","start" : "2018-03-28T13:00:00", "category": "Alternate"},
+              {"title" : "PARIS FRANCE","start" : "2018-03-28T14:30:00","allDay" :false, "category": "Existing"},
+              {"title" : "FLO RIDA","start" : "2018-03-29T08:30:00","allDay" :false, "category": "Existing"},
+              {"title" : "KIRBY_TPCHI CAIN","start" : "2018-03-29T10:00:00","allDay" :false, "category": "Existing"},
+              {"title" : "KENNA_TPCHI NOVAK","start" : "2018-03-29T11:30:00","allDay" :false, "category": "Existing"},
+              {"title" : "IRWIN_TPCHI GOMEZ","start" : "2018-03-29T14:00:00","allDay" :false, "category": "Existing"},
+              {"title" : "QUINN_TPCHI MARTINEZ","start" : "2018-03-29T15:00:00","allDay" :false, "category": "Existing"},
+              {"title" : "KENNY_TPCHI PETTY","start" : "2018-03-30T08:00:00","allDay" :false, "category": "Existing"},
+              {"title" : "KIMMIE TAPE","start" : "2018-03-30T10:00:00","allDay" :false, "category": "Existing"},
+              {"title" : "CONRAD_TPCHI PRUITT","start" : "2018-03-30T13:00:00","allDay" :false, "category": "Existing"},
+              {"title" : "KINE DIOP","start" : "2018-03-30T14:00:00","allDay" :false, "category": "Existing"},
+              {"title" : "EDYTH_TPCHI FROST","start" : "2018-03-30T14:30:00","allDay" :false, "category": "Existing"},
+              {"title" : "KIRBY_TPCHI LLYOD","start" : "2018-03-30T15:30:00","allDay" :false, "category": "Existing"}
+              ]'
+            categories='[
+              { "label": "Recommended", "color": "#85B454","hidden":false },
+              { "label": "Alternate", "color": "#cccccc","hidden":false },
+              { "label": "Existing", "color": "#4054B2","hidden":false }
+              ]'
+          >
+          </scheduler-component>
+        </div>
+        <div id="calendar2">
+          <scheduler-component
+            default-view="agendaWeek"
+            height="500"
+            hidden-days='[0,6]'
+            min-time="07:00",
+            max-time="15:00"
+          >
+          </scheduler-component>
+        </div>
+    </div>
+  </template>
+
+  <script>
+    class MyView7 extends Polymer.Element {
+      static get is() { return 'my-view7'; }
+      static get properties() {
+        return {
+          dumb: {
+            type: Boolean, 
+            value: true
+          }
+        }
+      }
+    }
+
+    window.customElements.define(MyView7.is, MyView7);
+  </script>
+</dom-module>
