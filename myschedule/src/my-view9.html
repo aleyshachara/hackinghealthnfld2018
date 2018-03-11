@@ -15,7 +15,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="shared-styles.html">
 
-<dom-module id="my-view3">
+<dom-module id="my-view9">
   <template>
     <style include="shared-styles">
       :host {
@@ -45,43 +45,39 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <button class="standard-button" on-click="showCal2">System Optimize</button>
         <button class="standard-button" on-click="showCal3">Patient Optimize</button>
       </div>
-        <div id="calendar1">
+        <div id="calendar3">
           <scheduler-component
             default-view="agendaWeek"
             height="500"
             hidden-days='[0,6]'
-            min-time="07:00",
+            min-time="07:00"
             max-time="15:00"
-            business-hours='{
-              "start": "07:00",
-              "end": "15:00"
-              }'
             events='[
-              {"title" : "MARIANO_TPCH ANTHONY -- Score: 12 (TIMI-STEMI)","start" : "2018-03-13T10:00:00", "category": "high"},
-              {"title" : "VESTA_TPCH BROOKS -- Score: 5 (TIMI)","start" : "2018-03-13T13:00:00", "category": "med"},
-              {"title" : "PEG WINNY -- Score: 2 (TIMI)","start" : "2018-03-14T14:00:00", "category": "low"},
+              {"title" : "MARIANO_TPCH ANTHONY -- Score: 12 (TIMI-STEMI)","start" : "2018-03-14T10:00:00", "backgroundColor": "#C51A21", "borderColor": "blue"},
+              {"title" : "VESTA_TPCH BROOKS -- Score: 5 (TIMI)","start" : "2018-03-13T08:00:00", "backgroundColor": "#E9C32B", "borderColor": "blue"},
+              {"title" : "PEG WINNY -- Score: 2 (TIMI)","start" : "2018-03-15T14:00:00", "category": "low"},
               {"title" : "PARIS FRANCE -- Score: 11 (TIMI-STEMI)","start" : "2018-03-12T12:30:00","allDay" :false, "category": "high"},
-              {"title" : "FLO RIDA -- Score: 14 (TIMI-STEMI)","start" : "2018-03-16T08:30:00","allDay" :false, "category": "high"},
-              {"title" : "KIRBY_TPCHI CAIN -- Score: 4 (TIMI)","start" : "2018-03-16T10:00:00","allDay" :false, "category": "med"},
-              {"title" : "KENNA_TPCHI NOVAK -- Score: 3 (TIMI)","start" : "2018-03-15T08:30:00","allDay" :false, "category": "low"},
-              {"title" : "IRWIN_TPCHI GOMEZ -- Score: 13 (TIMI-STEMI)","start" : "2018-03-15T14:00:00","allDay" :false, "category": "high"},
-              {"title" : "QUINN_TPCHI MARTINEZ -- Score: 1 (TIMI)","start" : "2018-03-13T08:00:00","allDay" :false, "category": "low"},
-              {"title" : "KENNY_TPCHI PETTY -- Score: 2 (TIMI)","start" : "2018-03-14T08:00:00","allDay" :false, "category": "low"},
-              {"title" : "KIMMIE TAPE -- Score: 4 (TIMI)","start" : "2018-03-16T12:30:00","allDay" :false, "category": "med"},
-              {"title" : "CONRAD_TPCHI PRUITT -- Score: 7 (TIMI)","start" : "2018-03-16T14:30:00","allDay" :false, "category": "high"},
+              {"title" : "FLO RIDA -- Score: 14 (TIMI-STEMI)","start" : "2018-03-14T13:00:00","allDay" :false, "backgroundColor": "#C51A21", "borderColor": "blue"},
+              {"title" : "KIRBY_TPCHI CAIN -- Score: 4 (TIMI)","start" : "2018-03-13T10:00:00","allDay" :false, "backgroundColor": "#E9C32B", "borderColor": "blue"},
+              {"title" : "KENNA_TPCHI NOVAK -- Score: 3 (TIMI)","start" : "2018-03-15T10:30:00","allDay" :false, "category": "low"},
+              {"title" : "IRWIN_TPCHI GOMEZ -- Score: 13 (TIMI-STEMI)","start" : "2018-03-12T10:00:00","allDay" :false, "category": "high"},
+              {"title" : "QUINN_TPCHI MARTINEZ -- Score: 1 (TIMI)","start" : "2018-03-16T08:00:00","allDay" :false, "category": "low"},
+              {"title" : "KENNY_TPCHI PETTY -- Score: 2 (TIMI)","start" : "2018-03-16T12:00:00","allDay" :false, "category": "low"},
+              {"title" : "KIMMIE TAPE -- Score: 4 (TIMI)","start" : "2018-03-15T07:30:00","allDay" :false, "category": "med"},
+              {"title" : "CONRAD_TPCHI PRUITT -- Score: 7 (TIMI)","start" : "2018-03-13T12:30:00","allDay" :false, "category": "high"},
               {"title" : "KINE DIOP -- Score: 1 (TIMI)","start" : "2018-03-16T15:30:00","allDay" :false, "category": "low"},
-              {"title" : "EDYTH_TPCHI FROST  -- Score: 3 (TIMI)","start" : "2018-03-12T10:30:00","allDay" :false, "category": "med"},
-              {"title" : "KIRBY_TPCHI LLYOD -- Score: 12 (TIMI-STEMI)","start" : "2018-03-14T09:30:00","allDay" :false, "category": "high"}
+              {"title" : "EDYTH_TPCHI FROST  -- Score: 3 (TIMI)","start" : "2018-03-14T07:30:00","allDay" :false, "category": "med"},
+              {"title" : "KIRBY_TPCHI LLYOD -- Score: 12 (TIMI-STEMI)","start" : "2018-03-12T07:30:00","allDay" :false, "category": "noshow"}
               ]'
             categories='[
               { "label": "low", "color": "#245D28","hidden":false },
               { "label": "med", "color": "#E9C32B","hidden":false },
-              { "label": "high", "color": "#C51A21","hidden":false }
+              { "label": "high", "color": "#C51A21","hidden":false },
+              { "label": "noshow", "color": "#DDDDDD", "hidden":false}
               ]'
-          >
+           on-event-click="showList">
           </scheduler-component>
         </div>
-        
     </div>
     <paper-dialog id="patientList">
       <div class="content-dialog pop-up-header">Patients with Short Notice Availability</div>
@@ -95,20 +91,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   </template>
 
   <script>
-    class MyView3 extends Polymer.Element {
-      static get is() { return 'my-view3'; }
+    class MyView9 extends Polymer.Element {
+      static get is() { return 'my-view9'; }
 
       showList() {
         this.$.patientList.open();
       }
 
-      showCal2() {
-        window.location.href="view8";
-      }
 
-      showCal3() {
-        window.location.href="view9"
-      }
 
       static get properties() {
         return {
@@ -120,6 +110,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
     }
 
-    window.customElements.define(MyView3.is, MyView3);
+    window.customElements.define(MyView9.is, MyView9);
   </script>
 </dom-module>
